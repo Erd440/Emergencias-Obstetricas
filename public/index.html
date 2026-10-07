@@ -1,0 +1,887 @@
+<!doctype html><html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"></head><body>
+<title>Emergencias Obstétricas en Equipo</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=Bricolage+Grotesque:wght@600;800&display=swap" rel="stylesheet">
+<style>
+:root{box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);
+--bg:#f7f3f4;--card:#ffffff;--ink:#2a1a1f;--mut:#6a5459;--line:#e3d4d8;--accent:#9b2547;--aink:#ffffff;
+--ok:#1b7f47;--okbg:#e3f4ea;--bad:#b8352a;--badbg:#fbe9e6;--warn:#8a5d0c;--warnbg:#fcf1d6;
+--font:'Atkinson Hyperlegible',system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;
+--disp:'Bricolage Grotesque','Atkinson Hyperlegible',system-ui,sans-serif}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+--bg:#1a1013;--card:#26171c;--ink:#f3e7ea;--mut:#b9a1a8;--line:#45303a;--accent:#f08aa5;--aink:#2a0b15;
+--ok:#4cc27d;--okbg:#10301f;--bad:#f08072;--badbg:#3a1714;--warn:#e3b457;--warnbg:#33290f;color-scheme:dark}}
+:root[data-theme="dark"]{
+--bg:#1a1013;--card:#26171c;--ink:#f3e7ea;--mut:#b9a1a8;--line:#45303a;--accent:#f08aa5;--aink:#2a0b15;
+--ok:#4cc27d;--okbg:#10301f;--bad:#f08072;--badbg:#3a1714;--warn:#e3b457;--warnbg:#33290f;color-scheme:dark}
+*{box-sizing:border-box}
+html{scroll-padding-top:env(safe-area-inset-top,0px);-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font:17px/1.5 var(--font)}
+#app{max-width:560px;margin:0 auto;padding:12px 16px 40px}
+h1,h2,h3{font-family:var(--disp);line-height:1.15;margin:.2em 0 .4em;letter-spacing:-.01em}
+h1{font-size:34px;font-weight:800}h2{font-size:25px;font-weight:800}h3{font-size:19px;font-weight:700}
+p{margin:.5em 0}
+.btn{display:block;width:100%;min-height:58px;padding:14px 16px;margin:10px 0;border:0;border-radius:16px;background:var(--accent);color:var(--aink);font:700 18px/1.2 var(--font);cursor:pointer;text-align:center}
+.btn.sec{background:transparent;color:var(--accent);border:2px solid var(--accent)}
+.btn.sm{min-height:48px;font-size:16px;padding:10px 12px}
+.btn:disabled{opacity:.4;cursor:default}
+.btn:active:not(:disabled){transform:scale(.99)}
+:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:14px;margin:12px 0}
+.hud{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;display:flex;gap:10px;align-items:center;justify-content:space-between;background:var(--bg);padding:8px 0;border-bottom:1px solid var(--line);font-size:15px}
+.hud b{font-size:17px}
+.hearts{color:var(--bad);letter-spacing:2px;font-size:19px;white-space:nowrap}.hearts i{color:var(--line);font-style:normal}
+.tm{font-variant-numeric:tabular-nums;font-weight:700;font-size:19px}.tm.low{color:var(--bad)}
+.imgbox{background:#140b0e;border-radius:14px;padding:6px;margin:10px 0}
+.imgbox svg{display:block;width:100%;height:auto;max-height:50vh;margin:0 auto}
+.photo{margin:10px 0;border-radius:14px;overflow:hidden;border:1px solid var(--line);background:#fff}
+.photo img{display:block;width:100%;height:auto;max-height:52vh;object-fit:contain;background:#fff}
+tr.alt td{color:var(--bad);font-weight:700}
+.flag{display:inline-block;background:var(--badbg);color:var(--bad);border-radius:6px;padding:0 6px;font-size:13px;font-weight:700;margin-left:4px}
+.cap{font-size:14px;color:var(--mut);margin:2px 2px 8px}
+.tag{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:10px 12px;margin:6px 0}
+.opt{display:block;width:100%;text-align:left;min-height:58px;padding:13px 14px;margin:8px 0;border:2px solid var(--line);background:var(--card);color:var(--ink);border-radius:14px;font:inherit;cursor:pointer}
+.opt.mine{border-color:var(--accent);box-shadow:inset 0 0 0 1px var(--accent)}
+.opt.ok{border-color:var(--ok);background:var(--okbg);box-shadow:inset 0 0 0 2px var(--ok);font-weight:700}
+.opt.bad{border-color:var(--bad);background:var(--badbg);box-shadow:inset 0 0 0 2px var(--bad)}
+.opt.ok::after{content:' ✓ Correcta';color:var(--ok)}
+.opt.bad::after{content:' ✗ Incorrecta';color:var(--bad);font-weight:700}
+.opt:disabled{color:var(--ink);opacity:1;cursor:default}
+.opt[hidden]{display:none}
+.fb{border-radius:14px;padding:12px 14px;margin:10px 0;border:2px solid}
+.fb.ok{background:var(--okbg);border-color:var(--ok)}.fb.bad{background:var(--badbg);border-color:var(--bad)}.fb.warn{background:var(--warnbg);border-color:var(--warn)}
+.fb strong{display:block;margin-bottom:2px}
+.ver{background:var(--warnbg);color:var(--warn);border-radius:6px;padding:0 4px;font-size:.86em;font-weight:700}
+.src{font-size:14px;color:var(--mut);margin-top:4px}
+table.t{width:100%;border-collapse:collapse;font-size:15px}
+table.t td,table.t th{padding:6px 8px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}
+table.t td:first-child{color:var(--mut)}
+.chips{display:flex;gap:8px;flex-wrap:wrap;margin:8px 0}
+.chip{min-height:48px;padding:8px 14px;border-radius:999px;border:2px solid var(--line);background:var(--card);color:var(--ink);font:inherit;font-weight:700;cursor:pointer}
+.chip[aria-pressed=true]{background:var(--accent);color:var(--aink);border-color:var(--accent)}
+.muted{color:var(--mut);font-size:15px}
+.row2{display:flex;gap:8px}.row2>*{flex:1}
+.roles{font-size:15px;display:grid;grid-template-columns:1fr 1fr;gap:2px 12px}
+.roles b{color:var(--accent)}
+.qn{font-size:15px;color:var(--mut)}
+.obs{border-left:5px solid var(--warn)}
+.obs .sct{margin-top:14px;font-size:17px}
+.seq{margin:6px 0 4px;padding-left:24px}.seq li{margin:5px 0}
+details.ckd{border-top:1px solid var(--line);margin-top:12px}
+details.ckd summary{font-weight:700;cursor:pointer;padding:13px 0;color:var(--accent)}
+.cki,.ckr{border-top:1px solid var(--line);padding:10px 0}
+.ckr{font-size:15px}
+.ckl{display:flex;gap:8px;align-items:center;font-weight:700}
+.ic{flex:none;width:32px;height:32px;border-radius:50%;background:var(--bg);color:var(--accent);display:inline-flex;align-items:center;justify-content:center}
+.ic svg{width:19px;height:19px}
+.seg{display:flex;gap:6px;margin-top:8px}
+.sg{flex:1;min-height:48px;padding:6px 4px;border-radius:12px;border:2px solid var(--line);background:var(--card);color:var(--ink);font:700 14px/1.15 var(--font);cursor:pointer}
+.sg[aria-pressed=true]::before{content:'✓ '}
+.sg[aria-pressed=true][data-v="1"]{background:var(--okbg);border-color:var(--ok)}
+.sg[aria-pressed=true][data-v="2"]{background:var(--badbg);border-color:var(--bad)}
+.sg[aria-pressed=true][data-v="3"]{background:var(--bg);border-color:var(--mut)}
+.rt{display:inline-block;border-radius:8px;padding:1px 8px;font-weight:700;margin:6px 6px 2px 0}
+.rt.hit,.rt.ok{background:var(--okbg);color:var(--ok)}.rt.miss{background:var(--badbg);color:var(--bad)}.rt.fa{background:var(--warnbg);color:var(--warn)}.rt.rev,.rt.nm{background:var(--bg);color:var(--mut)}
+.ov{position:fixed;inset:0;z-index:20;background:rgba(14,5,8,.62);overflow:auto;padding:calc(12px + env(safe-area-inset-top,0px)) 12px calc(12px + env(safe-area-inset-bottom,0px))}
+.ovc{max-width:520px;margin:0 auto;background:var(--card);border:1px solid var(--line);border-radius:18px;padding:16px}
+.bl{list-style:none;margin:8px 0;padding:0}
+.bl li{display:flex;gap:12px;align-items:center;padding:10px 0;border-top:1px solid var(--line)}
+.bl .ic{width:42px;height:42px}.bl .ic svg{width:24px;height:24px}
+.cards{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.cbtn{min-height:64px;padding:8px 10px;border-radius:14px;border:2px dashed var(--accent);background:var(--card);color:var(--ink);font:inherit;text-align:left;cursor:pointer}
+.cbtn b{display:block;color:var(--accent)}
+.cbtn small{color:var(--mut);font-size:13px;line-height:1.2;display:block}
+.cbtn:disabled{opacity:.4;border-style:solid}
+.big{font-family:var(--disp);font-size:44px;font-weight:800;line-height:1}
+.badge{display:flex;gap:10px;align-items:center;padding:8px 0}
+.badge svg{flex:none}
+.cert{border:3px double var(--accent);border-radius:18px;padding:18px;text-align:center;background:var(--card)}
+input[type=text]{width:100%;min-height:56px;font:inherit;padding:10px 14px;border-radius:14px;border:2px solid var(--line);background:var(--card);color:var(--ink)}
+details.rv{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:10px 14px;margin:8px 0}
+details.rv summary{font-weight:700;cursor:pointer;min-height:40px}
+.rvi{border-top:1px solid var(--line);padding:8px 0;font-size:15px}
+.rvi.crit{border-left:4px solid var(--bad);padding-left:8px}
+.rok{color:var(--ok);font-weight:700}
+@media print{.noprint{display:none!important}body{background:#fff;color:#000}}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+</style>
+<div id="app"><h1>Emergencias Obstétricas en Equipo</h1><p class="muted">Cargando...</p></div>
+<script>
+'use strict';
+/* ---------- Datos ---------- */
+const Q=(q,o,c,w,s)=>({q,o,c,w,s});
+const LV=[
+ {n:'Reconocer',t:120,b:'Ojo clínico',f:'Definiciones, factores de riesgo y causas de la hemorragia posparto, los estados hipertensivos y la sepsis materna.'},
+ {n:'Alerta temprana',t:180,b:'Alerta a tiempo',f:'Sistema de Alerta Temprana Obstétrico (SATO), índice de shock y estimación de la pérdida.'},
+ {n:'Primera respuesta',t:210,b:'Primeros minutos',f:'Código Rojo, crisis hipertensiva, sulfato de magnesio y primera hora de la sepsis, con escenas para observar.'},
+ {n:'Anticipar',t:270,b:'Tendencia a tiempo',f:'Tres tomas seriadas para detectar un deterioro incipiente.'},
+ {n:'Crisis en equipo',t:180,b:'Equipo en crisis',f:'Una hemorragia posparto masiva en eventos encadenados.'}
+];
+const CARDS=[
+ {k:'segunda',n:'Segunda mirada',d:'Marca referencias en la imagen y suma 30 s'},
+ {k:'pausa',n:'Pausa de equipo',d:'Detiene el reloj hasta 60 s'},
+ {k:'consulta',n:'Consulta al especialista',d:'Descarta dos opciones incorrectas'},
+ {k:'escudo',n:'Escudo',d:'Absorbe el próximo error crítico'}
+];
+const QL=['Identificar, 10 puntos','Interpretar, 20 puntos','Intervención prioritaria, 30 puntos'];
+const B5='Puérpera de 38 años, 65 kg, tercera gesta. Cesárea de urgencia hace 2 horas por desprendimiento de placenta normoinserta.';
+/* ---------- Bundles de referencia y checklist de quien observa ---------- */
+/* Cada ítem: texto corto para tildar, texto de la tarjeta (si es distinto) y dibujo del ícono. */
+const IT={
+ act:['Pedir ayuda y activar el código','Pedir ayuda y activar el Código Rojo con un solo llamado','M12 3l9 16H3zM12 9v5M12 16.5v.5'],
+ rol:['Roles asignados','Roles asignados: pelvis para obstetricia, cabeza para anestesia y brazo para enfermería','M8 8a3 3 0 1 0 0-.1M16 8a3 3 0 1 0 0-.1M3 20c0-3 2.5-5 5-5s5 2 5 5M11 20c0-3 2.5-5 5-5s5 2 5 5'],
+ o2:['Oxígeno con reservorio','Oxígeno con máscara con reservorio a 10 a 15 L/min','M6 4h12v6a6 6 0 0 1-12 0zM12 16v5M8 21h8'],
+ via:['Dos accesos venosos gruesos','Dos accesos venosos periféricos de calibre 14 a 16','M4 20l6-6M9 13l2 2M10 14l8-8M15 4l5 5M14 5l5 5'],
+ lab:['Laboratorio y pruebas cruzadas','Laboratorio: grupo y factor, pruebas cruzadas, hemograma, coagulograma con fibrinógeno, creatinina y lactato','M9 3h6M10 3v6l-5 10a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2l-5-10V3M7 15h10'],
+ cuan:['Cuantificación de pérdidas','Cuantificación de pérdidas pesando apósitos y compresas o con bolsa colectora calibrada','M6 4h12l-1 16H7zM8 9h8M8 13h8M8 17h8'],
+ cal:['Fluidos tibios y abrigo','Cristaloides tibios y abrigo para prevenir la hipotermia','M12 3v10M9 13a3 3 0 1 0 6 0M10 6h4M10 9h4'],
+ ta:['Control de TA y hoja SATO','Control de la tensión arterial cada 5 minutos, con registro en la hoja SATO','M3 12h4l2-5 3 10 2-5h7'],
+ labh:['Laboratorio de preeclampsia','Hemograma con plaquetas, LDH, TGO y TGP, creatinina y proteinuria','M9 3h6M10 3v6l-5 10a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2l-5-10V3M7 15h10'],
+ ant:['Antihipertensivo en 15 minutos','Antihipertensivo de primera línea dentro de los 15 minutos con TA de 160/110 o más','M5 12a7 7 0 0 1 14 0v0a7 7 0 0 1-14 0M5 12h14'],
+ mg:['Sulfato de magnesio con bomba','Dosis de carga de sulfato de magnesio con bomba de infusión','M5 4h14v12H5zM9 20h6M12 16v4M8 9h8'],
+ cmg:['Controles del magnesio','Reflejo patelar, frecuencia respiratoria y diuresis horaria durante la infusión','M4 12h4l2-4 4 8 2-4h4'],
+ gca:['Gluconato de calcio a mano','Gluconato de calcio al 10% preparado junto a la paciente','M9 3h6v4l2 2v12H7V9l2-2zM10 13h4M12 11v4'],
+ cult:['Cultivos antes del antibiótico','Hemocultivos y cultivos del foco antes del antibiótico, sin retrasarlo','M8 3h8M9 3v7l-4 9h14l-4-9V3M8 15h8'],
+ lac:['Lactato','Lactato en la primera muestra','M12 3C9 7 6.5 10 6.5 13.5a5.5 5.5 0 0 0 11 0C17.5 10 15 7 12 3z'],
+ atb:['Antibiótico en la primera hora','Antibiótico de amplio espectro dentro de la primera hora','M8 8l8 8M5.5 13.5l5-5a4 4 0 0 1 5.5 5.5l-5 5a4 4 0 0 1-5.5-5.5z'],
+ cri:['Cristaloides según perfusión','Cristaloides hasta 30 mL/kg en 3 horas, en bolos de 300 a 500 mL, si hay hipotensión o lactato mayor de 4','M7 3h10v4l-2 2v11H9V9L7 7zM9 13h6'],
+ diu:['Diuresis horaria','Sonda vesical y diuresis horaria','M12 3C9 7 6.5 10 6.5 13.5a5.5 5.5 0 0 0 11 0C17.5 10 15 7 12 3zM9 14h6'],
+ foco:['Búsqueda y control del foco','Búsqueda del foco y aviso para su control quirúrgico si corresponde','M11 4a7 7 0 1 0 0 14a7 7 0 0 0 0-14M16 16l5 5']
+};
+/* Etapas: el checklist de cada caso usa la lista de su etapa, en este orden. */
+const ST={
+ hpp:{n:'Código Rojo',it:['act','rol','o2','via','lab','cuan','cal'],img:{k:'pic',f:'bundle-codigo-rojo',cap:'Ubicación del equipo: cabeza para anestesia, brazo para enfermería y pelvis para obstetricia'}},
+ hta:{n:'HTA severa',it:['ta','via','labh','ant','mg','cmg','gca'],img:{k:'pic',f:'bundle-hta',cap:'Lo que tiene que estar a mano frente a una crisis hipertensiva'}},
+ sep:{n:'Sepsis materna',it:['cult','lac','atb','cri','diu','foco'],img:{k:'pic',f:'bundle-sepsis',cap:'Lo que se necesita en la primera hora'}}
+};
+/* Ilustración de cada caso (carpeta img). */
+const PIC={'1.1':'img-1-1-bolsa','1.2':'img-1-2-utero','1.3':'img-1-3-uterotonicos','1.4':'img-1-4-hta','1.5':'img-1-5-sepsis','2.1':'img-2-1-oews','2.2':'img-2-2-shock','2.3':'img-2-3-perdida','2.4':'img-2-4-disnea','3.1':'img-3-1-codigo-rojo','3.2':'img-3-2-crisis-hta','3.3':'img-3-3-magnesio','3.4':'img-3-4-sepsis','4.1':'img-4-1-sangrado-lento','4.2':'img-4-2-hellp','4.3':'img-4-3-magnesio-toxico','4.4':'img-4-4-endometritis','5.1':'img-5-1-alarma','5.2':'img-5-2-codigo-rojo-avanzado','5.3':'img-5-3-transfusion','5.4':'img-5-4-balon','5.5':'img-5-5-sbar'};
+const MK=['Sin marcar','Cumple','No cumple','No se observa'];
+const RT={hit:'Falla detectada',miss:'Falla no detectada',fa:'Falsa alarma',ok:'Acertó',rev:'Para revisar',nm:'Sin marcar'};
+const DEFN=['','La escena lo muestra hecho.','','La escena no llega a mostrarlo.'];
+const CK_PTS=10,CK_SEG=30,CK_EXTRA=60;
+/* La opción correcta va siempre primera (índice 0); la app mezcla el orden al mostrarla. c lista las opciones que son error crítico. */
+const CASES=[
+/* ---- Nivel 1 ---- */
+{id:'1.1',lv:0,t:'¿Es una hemorragia posparto?',ctx:'Puérpera de 31 años, parto vaginal hace 40 minutos. Se pesaron las compresas y la pérdida medida es de 550 mL. TA 112/70 y FC 88.',img:{k:'bag',ml:550,cap:'Bolsa colectora calibrada'},q:[
+ Q('¿Cómo se clasifica según la definición de la OMS 2025?',['Es una hemorragia posparto: la pérdida es de 500 mL o más','No es hemorragia posparto: el umbral es de 1000 mL','No es hemorragia posparto porque los signos vitales son normales','Solo sería hemorragia posparto en una cesárea'],[],'La OMS 2025 define la hemorragia posparto como una pérdida de 500 mL o más, o de 300 mL o más con signos vitales alterados, en las 24 horas que siguen a cualquier nacimiento.','OMS 2025'),
+ Q('¿Por qué conviene medir la pérdida en lugar de estimarla a simple vista?',['La estimación visual subestima la pérdida y demora la respuesta','Porque es más rápido','Porque lo pide el laboratorio','No hay diferencia entre una y otra'],[],'Pesar apósitos y compresas o usar una bolsa colectora calibrada da un dato objetivo para decidir.','OPS 2024, cap. 8'),
+ Q('¿Qué se hace ahora?',['Avisar, evaluar el tono uterino y controlar signos vitales y pérdidas en forma seriada','Esperar a que la pérdida llegue a 1000 mL para avisar','Registrar y volver a controlar en 4 horas','Trasladarla a la sala de puerperio sin cambios'],[1,2,3],'Reconocerla temprano permite actuar antes de que aparezca la inestabilidad.','OMS 2025, OPS 2024')]},
+{id:'1.2',lv:0,t:'Las cuatro T',ctx:'Puérpera de 36 años con embarazo gemelar. Parto vaginal después de una inducción prolongada con oxitocina. Sangrado sostenido. El útero está blando y por encima del ombligo.',img:{k:'uterus',tone:0,cap:'Palpación del fondo uterino'},q:[
+ Q('¿Cuál es la causa más probable del sangrado?',['Tono: atonía uterina','Trauma: un desgarro del canal de parto','Tejido: retención de restos placentarios','Trombina: una coagulopatía'],[],'Un útero blando y alto, con sobredistensión e inducción prolongada, orienta a atonía, la causa de cerca del 70% de las hemorragias posparto.','OPS 2024, cap. 8'),
+ Q('¿Qué factor de riesgo de este caso se vincula con la sobredistensión uterina?',['El embarazo gemelar','La edad materna','El grupo sanguíneo','La vía del parto'],[],'La gestación múltiple, el polihidramnios y la macrosomía sobredistienden el útero.','OPS 2024, cap. 8'),
+ Q('¿Cuál es la primera medida?',['Pedir ayuda, masaje uterino y uterotónicos','Esperar a que el útero se contraiga solo','Retirar la vía para evitar la sobrecarga','Indicar reposo y controlar en 2 horas'],[1,2,3],'Frente a la atonía se actúa sobre el tono de inmediato y se convoca al equipo.','OPS 2024, cap. 8')]},
+{id:'1.3',lv:0,t:'Prevenir antes de que sangre',ctx:'Parto vaginal de término, sin factores de riesgo. Acaba de salir el hombro anterior.',img:{k:'tags',items:['Oxitocina 10 UI','Ergometrina 0,2 mg','Misoprostol 400 a 600 mcg','Carbetocina'],cap:'Uterotónicos disponibles en la sala'},q:[
+ Q('¿Qué estrategia de prevención se aplica a todas las mujeres?',['Manejo activo del tercer periodo con oxitocina 10 UI IM o IV','Masaje uterino a todas, aunque hayan recibido un oxitócico','Ácido tranexámico a todas','Ninguna: solo se trata si sangra'],[],'El manejo activo del tercer periodo es la estrategia universal; la oxitocina se da al salir el hombro anterior o después del nacimiento.','OPS 2024, cap. 8'),
+ Q('¿En qué situación no se usa la ergometrina?',['En la hipertensión','En la anemia','En la primípara','En el parto de término'],[],'La ergometrina produce vasoconstricción y está contraindicada en la hipertensión.','OPS 2024, cap. 8'),
+ Q('Después del alumbramiento, ¿qué se controla en todas las puérperas?',['El tono uterino en forma periódica','Solo la temperatura','Nada, si recibió oxitocina','Solo el dolor'],[2],'La evaluación del tono uterino se hace en todas, aun con prevención adecuada.','OPS 2024, cap. 8')]},
+{id:'1.4',lv:0,t:'Hipertensión en el embarazo',ctx:'Primigesta de 32 semanas. TA 146/94 y 148/96 en dos tomas separadas por 4 horas. Índice proteína/creatinina de 0,4. No refiere síntomas.',img:{k:'mon',v:{TA:'148/96',FC:'84',FR:'16',SpO2:'98',T:'36,5'},alt:['TA'],cap:'Monitor en la segunda toma'},q:[
+ Q('¿Qué diagnóstico corresponde?',['Preeclampsia: hipertensión desde las 20 semanas con proteinuria','Hipertensión crónica','Hipertensión gestacional sin proteinuria','Crisis hipertensiva'],[],'La hipertensión de 140/90 o más desde las 20 semanas, en dos tomas separadas por 4 horas, con un índice proteína/creatinina de 0,3 o más, define la preeclampsia.','OPS 2024, cap. 1'),
+ Q('¿Desde qué valores se habla de crisis hipertensiva?',['PAS de 160 o más y/o PAD de 110 o más','PAS de 140 o más y/o PAD de 90 o más','PAS de 180 o más y PAD de 120 o más','PAS de 150 o más'],[],'La crisis hipertensiva se define con PAS de 160 o más y/o PAD de 110 o más.','OPS 2024, cap. 1'),
+ Q('¿Qué síntomas obligan a avisar de inmediato?',['Cefalea intensa, visión borrosa o dolor en el epigastrio','Edema leve de tobillos','Ganas frecuentes de orinar','Hambre a la noche'],[1],'Los síntomas cerebrales o visuales y la epigastralgia son criterios de severidad y pródromos de eclampsia.','OPS 2024, cap. 1')]},
+{id:'1.5',lv:0,t:'¿Es una sepsis?',ctx:'Puérpera de 4 días poscesárea. Temperatura de 38,4 °C, FC 116 y FR 26 sostenidas por más de 15 minutos. Loquios con mal olor.',img:{k:'mon',v:{TA:'104/62',FC:'116',FR:'26',SpO2:'96',T:'38,4'},alt:['FC','FR','T'],cap:'Monitor de la paciente'},q:[
+ Q('¿Qué indica el tamizaje?',['Tamizaje de sepsis positivo: hay dos o más criterios','Fiebre aislada, sin relevancia','Ansiedad por la internación','Tamizaje negativo porque la TA es normal'],[],'Con dos o más criterios (temperatura, FC mayor de 110 y FR mayor de 24 sostenidas, leucocitos) el tamizaje es positivo.','OPS 2024, sepsis materna (criterios CMQCC)'),
+ Q('¿Qué se busca a continuación?',['Signos de disfunción orgánica: PAS menor de 85, PAM menor de 65, plaquetas bajas, oliguria','Solo el hemograma','El peso de la paciente','Nada más: alcanza con el antitérmico'],[],'El segundo paso del tamizaje es buscar disfunción orgánica.','OPS 2024, sepsis materna'),
+ Q('¿Qué se hace en la primera hora?',['Cultivos sin retrasar el antibiótico, lactato, antibiótico y cristaloides según la perfusión','Antitérmico y control en 6 horas','Esperar el resultado de los cultivos para empezar el antibiótico','Alta con antibiótico oral'],[1,2,3],'La primera hora incluye cultivos, lactato, antibiótico y reposición según la perfusión.','OPS 2024, sepsis materna')]},
+/* ---- Nivel 2 ---- */
+{id:'2.1',lv:1,t:'Una hoja SATO que suma',ctx:'Puérpera de 6 horas poscesárea, respirando aire ambiente. Enfermería completa la hoja del Sistema de Alerta Temprana Obstétrico (SATO).',img:{k:'mon',v:{TA:'86/54',FC:'118',FR:'22',SpO2:'96',T:'37,2'},alt:['TA','FC','FR'],cap:'Signos vitales del control'},rows:[['PAS 86','2 puntos'],['FC 118','2 puntos'],['FR 22','1 punto'],['Resto de los parámetros','0 puntos'],['Suma SATO','5'],['Conciencia','Alerta']],q:[
+ Q('¿Qué nivel de riesgo corresponde a una suma SATO de 5?',['Mediano riesgo de deterioro: informar al equipo secundario, registrar y reevaluar en 30 a 60 minutos','Bajo riesgo: control habitual cada 6 horas','Alto riesgo: monitoreo continuo','Rutina, porque ningún parámetro suma 3'],[],'Con el SATO, una suma de 4 o 5, o un parámetro aislado con 3 puntos, es riesgo intermedio: observación al menos cada hora y llamado urgente al equipo a cargo.','Algoritmo SATO, Argentina'),
+ Q('En otra paciente un solo parámetro suma 3 y el total es 3. ¿Cómo se clasifica?',['Riesgo intermedio','Riesgo bajo, porque la suma es 3','Rutina','Riesgo alto'],[],'Un parámetro con 3 puntos basta para el riesgo intermedio, aunque la suma sea baja.','Algoritmo SATO, Argentina'),
+ Q('Si la suma SATO llega a 6, ¿qué corresponde?',['Monitoreo continuo y evaluación por el equipo terciario: obstetra, anestesia y terapia intensiva, con registro cada 30 minutos','Control cada 4 horas','Avisar en el pase de guardia','Repetir la toma en 6 horas'],[1,2,3],'Una suma de 6 o más es alto riesgo de deterioro. El deterioro suele verse entre 6 y 8 horas antes del paro.','Algoritmo SATO, Argentina, OPS 2024 cap. 9')]},
+{id:'2.2',lv:1,t:'Índice de shock',ctx:'Puérpera de 2 horas posparto vaginal. Tiene cuatro apósitos empapados.',img:{k:'mon',v:{TA:'90/60',FC:'102',FR:'30',SpO2:'95',T:'36,2'},alt:['FC','TA','FR'],cap:'Monitor de la paciente'},q:[
+ Q('¿Cuál es el índice de shock?',['1,1','0,7','1,7','0,9'],[],'Se divide la FC por la PAS: 102 dividido 90 da 1,13.','OPS 2024, cap. 8'),
+ Q('¿Qué indica ese valor?',['Supera 0,9: hay compromiso hemodinámico y corresponde escalar','Es normal','Recién preocupa por encima de 1,7','Indica hipertensión'],[],'El índice normal va de 0,7 a 0,9. Por encima de 0,9 indica severidad, y desde 1,4 la intervención es urgente.','OPS 2024, cap. 8'),
+ Q('¿Qué se hace?',['Activar el Código Rojo: dos vías, laboratorio, hemocomponentes y pase a terapia intensiva','Seguir controlando cada hora','Cambiar los apósitos y esperar','Dar un analgésico'],[1,2,3],'La combinación de pérdida visible, taquicardia, taquipnea e índice de shock elevado activa el Código Rojo.','OPS 2024, cap. 8')]},
+{id:'2.3',lv:1,t:'Cuánto sangró',ctx:'Puérpera que sangra desde hace 30 minutos. Está agitada.',img:{k:'mon',v:{TA:'75/48',FC:'112',FR:'26',SpO2:'94',T:'36,0'},alt:['FC','TA'],cap:'Monitor de la paciente'},rows:[['Llenado capilar','3 s'],['Sensorio','Agitada']],q:[
+ Q('¿Qué grado de shock tiene?',['Moderado: pérdida estimada del 26 al 35% de la volemia','Sin shock: menos del 15%','Leve: del 16 al 25%','Severo: más del 35%'],[],'FC entre 101 y 120, PAS entre 70 y 79 y agitación corresponden al shock moderado.','OPS 2024, cap. 8'),
+ Q('¿Por qué la TA puede engañar en la puérpera?',['La hipervolemia del embarazo sostiene la TA hasta pérdidas grandes, y la hipotensión aparece tarde','Porque los tensiómetros fallan en el embarazo','Porque la TA sube cuando sangra','No engaña: es el mejor signo temprano'],[],'Por eso se miran juntas la FC, el sensorio, el llenado capilar y el índice de shock.','OPS 2024, cap. 8'),
+ Q('¿Cómo se repone?',['Bolos de 300 a 500 mL de cristaloides tibios con reevaluación, y sangre sin esperar la hemoglobina','Dos litros rápidos de cristaloides fríos','Esperar el hemograma para decidir','Nada hasta que llegue el médico'],[1,2,3],'La estrategia es restrictiva, con fluidos tibios. Se piden 2 unidades de glóbulos rojos 0 negativo de inmediato.','OPS 2024, cap. 8')]},
+{id:'2.4',lv:1,t:'Un parámetro en rojo',ctx:'Gestante de 35 semanas con preeclampsia, internada en sala. En el control de las 22 refiere que le falta el aire. Necesita oxígeno con cánula para sostener una saturación mayor de 95%.',img:{k:'mon',v:{TA:'150/98',FC:'104',FR:'32',SpO2:'93',T:'36,8'},alt:['FR','SpO2','TA'],cap:'Monitor de la paciente'},q:[
+ Q('¿Cómo se clasifica con el SATO?',['Alto riesgo de deterioro: FR de 30 o más suma 3 y la suma total supera 6','Bajo riesgo, porque la TA es menor de 160','Riesgo intermedio, porque solo un parámetro está en rojo','Rutina'],[],'FR 32 suma 3, PAS 150 suma 2, PAD 98 suma 1 y el oxígeno para sostener la saturación suma 1: la suma llega a 7.','Algoritmo SATO, Argentina'),
+ Q('¿Qué complicación hay que sospechar?',['Edema pulmonar','Ansiedad nocturna','Reflujo gastroesofágico','Cansancio propio del embarazo'],[],'El edema pulmonar es un criterio de severidad de la preeclampsia.','OPS 2024, cap. 1'),
+ Q('¿Qué se hace?',['Llamar de inmediato al médico, sentarla, dar oxígeno y comunicar con SBAR','Anotar y avisar en el pase de la mañana','Pasar más líquidos','Acostarla boca arriba y esperar'],[1,2,3],'Se activa la respuesta rápida con un llamado y una comunicación estructurada.','OPS 2024, cap. 9')]},
+/* ---- Nivel 3 ---- */
+{id:'3.1',lv:2,t:'Código Rojo: los primeros minutos',ctx:'Puérpera de 1 hora posparto vaginal. Sangrado abundante, pálida y sudorosa. Se activa el Código Rojo.',img:{k:'mon',v:{TA:'88/56',FC:'118',FR:'26',SpO2:'95',T:'36,1'},alt:['FC','TA'],cap:'Monitor al activar el código'},ck:{e:'hpp',tt:'primeros minutos del Código Rojo',st:['La partera pide ayuda y activa el Código Rojo.','El obstetra se ubica en la pelvis y comienza el masaje bimanual.','Anestesia evalúa la vía aérea y coloca oxígeno con máscara con reservorio.','Enfermería coloca una vía de 18 G y conecta un cristaloide a temperatura ambiente.','Se extraen muestras para laboratorio y pruebas cruzadas.'],pie:'La escena muestra los primeros cinco minutos. No muestra cómo se mide la pérdida.',v:[1,1,1,2,1,3,2],n:{3:'Una sola vía de 18 G: el Código Rojo pide dos accesos gruesos, de 14 a 16 G.',6:'El cristaloide se pasa tibio y la paciente se abriga: la hipotermia es parte del diamante de la muerte.'}},q:[
+ Q('¿Qué hace enfermería desde el brazo?',['Accesos, muestras, medicación, líquidos, hemocomponentes y control de pulsos','Masaje bimanual y búsqueda de la causa','Vía aérea, oxigenación y registro de tiempos','Llamar a la familia'],[],'En el Código Rojo la pelvis es del obstetra, la cabeza de anestesia y el brazo de enfermería.','OPS 2024, cap. 8'),
+ Q('¿Qué integra el diamante de la muerte?',['Acidosis, coagulopatía, hipotermia e hipocalcemia','Fiebre, taquicardia, anemia y dolor','Hipertensión, edema, proteinuria y cefalea','Hipoglucemia, hiperpotasemia, alcalosis y bradicardia'],[],'Son las alteraciones que se potencian entre sí en la hemorragia masiva.','OPS 2024, cap. 8'),
+ Q('¿Qué uterotónico y qué esquema de ácido tranexámico corresponden?',['Oxitocina IV en infusión y ácido tranexámico 1 g IV lento apenas se reconoce la hemorragia','Ergometrina IV en bolo y ácido tranexámico a las 6 horas','Solo ácido tranexámico, sin uterotónicos','Esperar el laboratorio para indicar el ácido tranexámico'],[1,3],'Oxitocina 20 UI en 500 mL por bomba. Ácido tranexámico 1 g a 1 mL/min, con una segunda dosis si sigue sangrando a los 30 minutos.','OPS 2024, cap. 8')]},
+{id:'3.2',lv:2,t:'Crisis hipertensiva',ctx:'Gestante de 34 semanas con preeclampsia. TA 168/112 en dos tomas separadas por 15 minutos. Cefalea intensa.',img:{k:'mon',v:{TA:'168/112',FC:'96',FR:'18',SpO2:'97',T:'36,6'},alt:['TA'],cap:'Monitor de la paciente'},ck:{e:'hta',tt:'primeros 15 minutos',st:['Se controla la TA cada 5 minutos.','Se colocan dos vías periféricas con catéter 16.','Se extrae laboratorio: hemograma con plaquetas, LDH, TGO y TGP, creatinina.','Como primera medida se da nifedipina 10 mg por vía sublingual.','Se inicia la dosis de ataque de sulfato de magnesio: 5 g en 100 mL, a pasar en 20 minutos con bomba.'],pie:'La escena muestra los primeros 15 minutos. Todavía no corresponden los controles del magnesio.',v:[1,1,1,2,1,3,3],n:{3:'La primera línea es labetalol 20 mg EV lento. La nifedipina se agrega recién a los 60 minutos si la TA no bajó, y siempre por vía oral, nunca sublingual.',5:'Todavía no corresponde valorarlos en la escena.',6:'La escena no muestra si el gluconato de calcio está a mano.'}},q:[
+ Q('¿En cuánto tiempo hay que tratar la TA?',['En los primeros 15 minutos','En la primera hora','Cuando aparezca una convulsión','En 6 horas'],[],'Con TA de 160/110 o más el tratamiento empieza dentro de los 15 minutos.','OPS 2024, cap. 1'),
+ Q('¿Cuál es la meta de TA en la primera hora?',['PAS de 130 a 150 y PAD de 80 a 100','Llegar a 110/70 lo antes posible','Por debajo de 120/80','No hay meta'],[],'Un descenso brusco compromete la perfusión placentaria.','OPS 2024, cap. 1'),
+ Q('Se dio labetalol 20 mg EV lento y a los 15 minutos la TA no bajó. ¿Qué sigue?',['Labetalol 40 mg EV lento; si no baja, 80 mg a los 30 y a los 45 minutos, y a los 60 minutos agregar nifedipina oral 10 a 20 mg','Repetir 20 mg cada 5 minutos sin límite','Pasar a nifedipina sublingual','Esperar una hora antes de repetir'],[1,2,3],'El esquema es minuto 0: 20 mg; minuto 15: 40 mg; minutos 30 y 45: 80 mg; minuto 60: se agrega nifedipina oral. Siempre EV lento y con control de TA cada 5 minutos.','Algoritmo HTA/PE, Argentina')]},
+{id:'3.3',lv:2,t:'Sulfato de magnesio',ctx:'Puérpera con preeclampsia severa, 70 kg. Se indica sulfato de magnesio. En la mesa hay ampollas de 5 mL al 25%, solución fisiológica, dextrosa al 5% y gluconato de calcio al 10%.',img:{k:'tags',items:['Ataque: 5 g EV en 20 minutos','Mantenimiento: 1 g/h por 24 horas','Gluconato de calcio al 10%'],cap:'Lo indicado y lo que hay en la mesa'},q:[
+ Q('¿Cómo se prepara y se pasa la dosis de ataque?',['5 g, que son 4 ampollas de 5 mL al 25%, en 100 mL de solución fisiológica o Ringer, EV en 20 minutos','5 g EV en bolo directo','1 g/h sin dosis de ataque','4 ampollas sin diluir por vía intramuscular'],[1],'Cada ampolla de 5 mL al 25% tiene 1,25 g: 4 ampollas son 5 g.','Algoritmo HTA/PE, Argentina'),
+ Q('¿Cómo se arma y se pasa el mantenimiento?',['24 g, que son 19 ampollas al 25%, en 405 mL de dextrosa al 5% o fisiológica, a 1 g/h por bomba durante 24 horas sin síntomas','2 g/h hasta que baje la TA','Solo durante la cesárea','12 horas fijas, sin bomba'],[],'1 g/h equivale a unos 21 mL/h por bomba, o 7 gotas por minuto con macrogotero. En la eclampsia se mantiene al menos 48 horas.','Algoritmo HTA/PE, Argentina, OPS 2024 cap. 1'),
+ Q('A las 6 horas: reflejo patelar ausente, FR 10 y diuresis de 20 mL/h. ¿Qué se hace?',['Suspender la infusión, avisar y dar gluconato de calcio al 10%, 1 g IV lento','Subir el goteo para prevenir la convulsión','Pedir el dosaje de magnesio y seguir igual','Dar un diurético y continuar'],[1,2,3],'Son signos de intoxicación por magnesio. No se miden niveles para decidir.','OPS 2024, cap. 1')]},
+{id:'3.4',lv:2,t:'Primera hora de la sepsis',ctx:'Puérpera de 5 días poscesárea, 60 kg. Herida con secreción purulenta.',img:{k:'mon',v:{TA:'84/50',FC:'124',FR:'28',SpO2:'94',T:'38,9'},alt:['TA','FC','FR','T'],cap:'Monitor de la paciente, PAM 61'},ck:{e:'sep',tt:'primera hora',st:['Se coloca una vía y se extrae lactato.','Se administra el antibiótico indicado.','Diez minutos después se toman los hemocultivos.','Se pasa un bolo de 500 mL de cristaloides y se reevalúa.','Se coloca sonda vesical para la diuresis horaria.'],pie:'La escena muestra la primera hora. Cirugía todavía no evaluó la herida.',v:[2,1,1,1,1,3],n:{0:'Los cultivos se toman antes del antibiótico, sin demorarlo.',5:'La escena no llega a mostrar la evaluación del foco.'}},q:[
+ Q('¿Qué muestra el cuadro?',['Sepsis con disfunción orgánica: PAM menor de 65','Una infección leve de la herida','Una reacción al antibiótico','Fiebre por la bajada de la leche'],[],'La hipotensión con PAM menor de 65 es disfunción orgánica.','OPS 2024, sepsis materna'),
+ Q('Después de 30 mL/kg la PAM sigue en 60. ¿Qué sigue?',['Noradrenalina con meta de PAM de 65 o más','Más cristaloides sin límite','Esperar 6 horas','Suspender los líquidos y el antibiótico'],[],'Si no responde a la noradrenalina se agrega vasopresina, y se considera hidrocortisona.','OPS 2024, sepsis materna'),
+ Q('¿Qué se hace con el foco?',['Avisar para la evaluación quirúrgica y el control del foco, sin demorar el resto del tratamiento','Esperar a que el antibiótico lo resuelva','Curar la herida al día siguiente','Suspender el antibiótico hasta tener los cultivos'],[1,3],'El control del foco es parte del tratamiento desde el inicio.','OPS 2024, sepsis materna')]},
+/* ---- Nivel 4 ---- */
+{id:'4.1',lv:3,t:'El sangrado lento',ctx:'Puérpera de 30 años. Parto vaginal de un recién nacido de 4 kg con episiotomía. El útero está bien contraído en todas las tomas.',tomas:[
+ {h:'13:00',img:{k:'mon',v:{TA:'118/74',FC:'84',FR:'16',SpO2:'98',T:'36,6'},alt:[]},rows:[['Útero','Contraído'],['Apósitos','1 en la última hora'],['Sensorio','Lúcida']]},
+ {h:'14:00',img:{k:'mon',v:{TA:'110/70',FC:'98',FR:'18',SpO2:'98',T:'36,5'},alt:['FC']},rows:[['Útero','Contraído'],['Apósitos','2 empapados'],['Sensorio','Lúcida']]},
+ {h:'15:00',img:{k:'mon',v:{TA:'96/62',FC:'112',FR:'22',SpO2:'96',T:'36,3'},alt:['FC','TA']},rows:[['Útero','Contraído'],['Apósitos','3 empapados, con coágulos'],['Periné','Sangrado activo por la episiotomía'],['Sensorio','Ansiosa']]}],q:[
+ Q('¿Qué muestra la tendencia?',['Un sangrado sostenido con índice de shock que sube de 0,7 a 1,2','Una puérpera estable','Una mejoría progresiva','Un error de la balanza'],[],'Se calcula en cada toma: 84/118, 98/110 y 112/96.','OPS 2024, cap. 8'),
+ Q('El útero está contraído. ¿Qué causa se sospecha?',['Trauma: el sangrado de la episiotomía o un desgarro','Tono','Tejido','Ninguna: un útero contraído descarta la hemorragia'],[3],'El trauma explica cerca del 20% de las hemorragias posparto y sangra con el útero firme.','OPS 2024, cap. 8'),
+ Q('¿Qué se hace?',['Avisar, activar la respuesta a la hemorragia y revisar el canal de parto para reparar, con dos vías y laboratorio','Seguir observando porque el útero está bien','Masaje uterino enérgico y nada más','Esperar la próxima toma'],[1,3],'La sutura del desgarro es parte del escalamiento.','OPS 2024, cap. 8')]},
+{id:'4.2',lv:3,t:'La preeclampsia que cambia',ctx:'Gestante de 33 semanas con preeclampsia sin criterios de severidad al ingreso, internada en sala.',tomas:[
+ {h:'08:00',img:{k:'mon',v:{TA:'144/92',FC:'82',FR:'16',SpO2:'98',T:'36,5'},alt:['TA']},rows:[['Plaquetas','180.000'],['TGO','28 UI/L'],['Síntomas','Ninguno']]},
+ {h:'14:00',img:{k:'mon',v:{TA:'152/98',FC:'88',FR:'17',SpO2:'98',T:'36,6'},alt:['TA']},rows:[['Plaquetas','120.000'],['TGO','75 UI/L'],['Síntomas','Náuseas']]},
+ {h:'20:00',img:{k:'mon',v:{TA:'158/104',FC:'94',FR:'18',SpO2:'97',T:'36,6'},alt:['TA']},rows:[['Plaquetas','85.000'],['TGO','160 UI/L'],['LDH','Elevada'],['Síntomas','Dolor en el epigastrio']]}],q:[
+ Q('¿Qué muestra la tendencia?',['Plaquetas que bajan, transaminasas que suben y dolor epigástrico: evolución a síndrome HELLP','Una preeclampsia estable','Una gastritis','Un error del laboratorio'],[],'Cada toma suma un dato de daño de órgano.','OPS 2024, cap. 1'),
+ Q('¿Por qué importa el dolor epigástrico?',['Es un criterio de severidad y un pródromo de eclampsia','Porque indica hambre','Porque se debe al reflujo del embarazo','No importa mientras la TA sea menor de 160'],[],'La epigastralgia refractaria es criterio de finalización inmediata.','OPS 2024, cap. 1'),
+ Q('¿Qué se hace?',['Avisar, iniciar sulfato de magnesio, controlar la TA y preparar la finalización tras estabilizar, con maduración pulmonar por ser menor de 34 semanas','Dar un antiácido y controlar en 12 horas','Esperar a que la TA llegue a 160/110','Dar el alta con control ambulatorio'],[1,2,3],'El síndrome HELLP es criterio de finalización. Antes de las 34 semanas se completa la maduración pulmonar si la situación materna lo permite.','OPS 2024, cap. 1')]},
+{id:'4.3',lv:3,t:'El magnesio que se acumula',ctx:'Puérpera de 8 horas poscesárea por preeclampsia severa, con sulfato de magnesio a 1 g/h.',tomas:[
+ {h:'10:00',img:{k:'mon',v:{TA:'142/90',FC:'86',FR:'16',SpO2:'97',T:'36,6'},alt:[]},rows:[['Reflejo patelar','Presente'],['Diuresis','60 mL/h'],['Sensorio','Lúcida']]},
+ {h:'12:00',img:{k:'mon',v:{TA:'138/88',FC:'80',FR:'13',SpO2:'95',T:'36,5'},alt:['FR']},rows:[['Reflejo patelar','Disminuido'],['Diuresis','30 mL/h'],['Sensorio','Somnolienta']]},
+ {h:'14:00',img:{k:'mon',v:{TA:'130/84',FC:'72',FR:'10',SpO2:'92',T:'36,4'},alt:['FR','SpO2']},rows:[['Reflejo patelar','Ausente'],['Diuresis','15 mL/h'],['Sensorio','Muy somnolienta']]}],q:[
+ Q('¿Qué muestra la tendencia?',['Una intoxicación por magnesio que progresa','Una paciente que descansa','Una mejoría de la preeclampsia','Una hipoglucemia'],[],'Se pierden el reflejo patelar, la frecuencia respiratoria y la diuresis en forma progresiva.','OPS 2024, cap. 1'),
+ Q('¿Qué dato favorece la acumulación?',['La caída de la diuresis, porque el magnesio se elimina por el riñón','La edad','La cesárea','El ayuno'],[],'Con oliguria el magnesio se acumula aunque la dosis no cambie.','OPS 2024, cap. 1'),
+ Q('¿Qué se hace?',['Suspender la infusión, avisar, gluconato de calcio al 10% 1 g IV lento y soporte respiratorio','Seguir con la infusión hasta las 24 horas','Bajar el goteo a 1 g/h sin avisar','Pedir el dosaje y esperar el resultado'],[1,2,3],'Reflejo ausente, FR menor de 12 y diuresis menor de 30 mL/h obligan a suspender.','OPS 2024, cap. 1')]},
+{id:'4.4',lv:3,t:'Fiebre que no cede',ctx:'Puérpera de 3 días poscesárea, con buena evolución inicial.',tomas:[
+ {h:'08:00',img:{k:'mon',v:{TA:'118/72',FC:'96',FR:'18',SpO2:'98',T:'37,6'},alt:[]},rows:[['Útero','Doloroso a la palpación'],['Loquios','Sin olor'],['Sensorio','Lúcida']]},
+ {h:'14:00',img:{k:'mon',v:{TA:'108/66',FC:'108',FR:'22',SpO2:'97',T:'38,3'},alt:['T']},rows:[['Útero','Doloroso'],['Loquios','Fétidos'],['Sensorio','Lúcida']]},
+ {h:'20:00',img:{k:'mon',v:{TA:'82/50',FC:'118',FR:'26',SpO2:'95',T:'38,8'},alt:['TA','FC','FR','T']},rows:[['Loquios','Fétidos'],['Sensorio','Confusa'],['Diuresis','Escasa']]}],q:[
+ Q('¿Qué muestra la tendencia?',['Una infección puerperal que evoluciona a sepsis con disfunción orgánica','Una fiebre por congestión mamaria','Una evolución normal','Una deshidratación leve'],[],'A las 20 se suman hipotensión, confusión y oliguria.','OPS 2024, sepsis materna'),
+ Q('¿Qué foco es el más probable?',['Endometritis','Mastitis','Neumonía','Infección urinaria baja'],[],'Útero doloroso y loquios fétidos orientan al foco uterino.','OPS 2024, sepsis materna'),
+ Q('¿Qué se hace?',['Cultivos, lactato, antibiótico en la primera hora, cristaloides y aviso al equipo','Antitérmico y control a la mañana','Esperar los cultivos para iniciar el antibiótico','Indicar reposo y más líquidos por boca'],[1,2,3],'Cada hora de demora en el antibiótico empeora el pronóstico.','OPS 2024, sepsis materna')]},
+/* ---- Nivel 5 ---- */
+{id:'5.1',lv:4,t:'La alarma',ctx:B5+' En el control de enfermería la encuentra pálida.',img:{k:'mon',v:{TA:'84/50',FC:'126',FR:'28',SpO2:'94',T:'36,0'},alt:['TA','FC','FR'],cap:'Monitor de la paciente'},rows:[['Apósito de la herida','Seco'],['Útero','Blando, por encima del ombligo'],['Loquios','Abundantes, con coágulos'],['Sensorio','Agitada']],q:[
+ Q('¿Qué dato se calcula primero?',['El índice de shock: 126 dividido 84 da 1,5','La diuresis de 24 horas','El peso','El balance de la cesárea'],[],'Con un índice de 1,4 o más la intervención es urgente.','OPS 2024, cap. 8'),
+ Q('¿Qué está pasando?',['Una hemorragia posparto por atonía, con shock','Una reacción a la anestesia','Dolor posoperatorio','Una hipoglucemia'],[],'El apósito seco no descarta el sangrado: la pérdida sale por vía vaginal.','OPS 2024, cap. 8'),
+ Q('¿Qué se hace primero?',['Pedir ayuda y activar el Código Rojo','Ir a buscar al médico y dejarla sola','Esperar la próxima toma','Dar analgesia'],[1,2,3],'El Código Rojo se activa con un solo llamado.','OPS 2024, cap. 8')]},
+{id:'5.2',lv:4,t:'Los primeros diez minutos',ctx:B5+' El Código Rojo está activado.',img:{k:'mon',v:{TA:'68/40',FC:'132',FR:'30',SpO2:'93',T:'35,8'},alt:['TA','FC','FR','SpO2'],cap:'Monitor a los diez minutos'},rows:[['Pérdida medida','1800 mL'],['Sensorio','Letárgica'],['Llenado capilar','Más de 3 s']],ck:{e:'hpp',tt:'los primeros diez minutos',st:['Se asignan los roles: pelvis, cabeza y brazo.','Oxígeno con máscara con reservorio.','Dos vías de 16 G.','Laboratorio con fibrinógeno y pruebas cruzadas.','Se pesan apósitos y compresas.','Se pasan cristaloides tibios y se abriga a la paciente.'],pie:'La escena empieza con el código ya activado.',v:[3,1,1,1,1,1,1],n:{0:'La activación ocurrió antes de la escena.'}},q:[
+ Q('¿Qué grado de shock tiene?',['Severo: pérdida mayor del 35%','Leve','Sin shock','Moderado'],[],'FC mayor de 120, PAS menor de 70, letargia y llenado lento corresponden al shock severo.','OPS 2024, cap. 8'),
+ Q('¿Qué conducta corresponde con la sangre?',['Dos unidades de glóbulos rojos 0 negativo de inmediato, sin esperar la hemoglobina','Esperar las pruebas cruzadas completas','Transfundir solo si la hemoglobina es menor de 7','Solo cristaloides hasta 3 litros'],[1,3],'En el shock hemorrágico la sangre no espera al laboratorio.','OPS 2024, cap. 8'),
+ Q('¿Qué se agrega para sostener la perfusión mientras llega el tratamiento definitivo?',['El traje antichoque no neumático','Trendelenburg extremo','Vasopresores como primera medida','Más cristaloides fríos'],[3],'El traje antichoque no neumático es la primera estrategia en el shock y puede quedar hasta 48 horas.','OPS 2024, cap. 8')]},
+{id:'5.3',lv:4,t:'Transfusión masiva',ctx:B5+' Sigue sangrando. Fibrinógeno de 150 mg/dL, temperatura de 35,2 °C y calcio iónico bajo.',img:{k:'tags',items:['6 U de glóbulos rojos','6 U de plasma fresco congelado','1 aféresis de plaquetas','10 U de crioprecipitado'],cap:'Paquete de transfusión masiva'},rows:[['Fibrinógeno','150 mg/dL'],['Temperatura','35,2 °C'],['Calcio iónico','Bajo']],q:[
+ Q('¿En qué proporción se transfunde?',['1:1:1 de glóbulos rojos, plasma y plaquetas','Solo glóbulos rojos','Cuatro de plasma por cada glóbulo rojo','Tres de cristaloides por cada unidad'],[],'El paquete de transfusión masiva sigue la proporción 1:1:1.','OPS 2024, cap. 8'),
+ Q('Con fibrinógeno de 150 mg/dL, ¿qué se indica?',['Crioprecipitado, porque está por debajo de 200','Nada: recién por debajo de 100','Plaquetas','Vitamina K'],[],'El crioprecipitado se indica con fibrinógeno menor de 200 y es obligatorio por debajo de 100.','OPS 2024, cap. 8'),
+ Q('Temperatura de 35,2 °C y calcio bajo. ¿Qué hace enfermería?',['Calentar fluidos y hemocomponentes, abrigar y reponer calcio según indicación','Bajar la temperatura de la sala','Suspender la transfusión hasta que suba la temperatura','Nada: no influye en el sangrado'],[1,2,3],'La hipotermia y la hipocalcemia empeoran la coagulopatía.','OPS 2024, cap. 8')]},
+{id:'5.4',lv:4,t:'Escalar',ctx:B5+' Con uterotónicos y masaje el útero sigue blando.',img:{k:'uterus',tone:0,cap:'Palpación del fondo uterino'},q:[
+ Q('¿Cuál es el paso siguiente?',['Balón hidrostático intrauterino, que puede quedar hasta 24 horas','Otra dosis de oxitocina en 2 horas','Embolización con la paciente inestable','Pase a sala de puerperio'],[1,2,3],'La embolización se reserva para pacientes estables.','OPS 2024, cap. 8'),
+ Q('Si el balón no controla el sangrado, ¿qué sigue?',['Suturas compresivas tipo B-Lynch, ligaduras vasculares e histerectomía','Solo más uterotónicos','Un segundo balón por 48 horas','Embolización en cualquier caso'],[],'El escalamiento quirúrgico termina en la histerectomía y la cirugía de control de daños.','OPS 2024, cap. 8'),
+ Q('¿Cuáles son las metas de la reanimación?',['Índice de shock menor de 0,9, temperatura mayor de 35 °C, lactato menor de 2, fibrinógeno mayor de 200 y SpO2 de 95% o más','Solo una TA normal','Una hemoglobina de 12','Que deje de sangrar, sin otros controles'],[],'Las metas se controlan en conjunto, no con un único dato.','OPS 2024, cap. 8')]},
+{id:'5.5',lv:4,t:'El cierre',ctx:B5+' La hemorragia se controló con balón y transfusión. Pasa a terapia intensiva.',rows:[['Evento 1','Deterioro en el control de enfermería'],['Evento 2','Código Rojo y shock severo'],['Evento 3','Transfusión masiva'],['Evento 4','Balón intrauterino con control del sangrado']],sbar:true,q:[
+ Q('¿Qué herramienta ordena el pase a terapia intensiva?',['SBAR: situación, antecedentes, valoración y recomendación','Un mensaje informal','El parte de enfermería del día siguiente','Ninguna: el equipo de terapia lee la historia'],[],'La comunicación estructurada evita omisiones en el pase.','OPS 2024, cap. 9'),
+ Q('¿Para qué se notifica el evento?',['Para analizar las causas del sistema y evitar que se repita, sin buscar culpables','Para sancionar a quien estaba de turno','Para cumplir un trámite','Para no hablar con la familia'],[],'La notificación alimenta la mejora de los procesos.','OPS 2024'),
+ Q('¿Qué controles necesita en las primeras horas?',['Signos vitales, pérdidas, diuresis horaria, temperatura y laboratorio seriado, vigilando la recidiva','Control cada 12 horas','Retirar todas las vías','Solo la temperatura'],[1,2],'El balón puede quedar hasta 24 horas y el sangrado puede reaparecer.','OPS 2024, cap. 8')]}
+];
+/* ---------- Imágenes SVG (dibujos esquemáticos, sin fotos) ---------- */
+const SV=(vb,body,label)=>'<svg viewBox="'+vb+'" role="img" aria-label="'+esc(label||'Dibujo esquemático')+'" xmlns="http://www.w3.org/2000/svg" font-family="Atkinson Hyperlegible,system-ui,sans-serif">'+body+'</svg>';
+/* Monitor multiparamétrico. m.v trae los valores; m.alt los que están fuera de rango (la segunda mirada los marca). */
+function monSVG(m,hint){
+ const v=m.v||{},alt=m.alt||[];
+ const P=[['FC','FC','lpm','#5ee08a'],['TA','TA','mmHg','#ff8a8a'],['SpO2','SpO2','%','#5fd3f0'],['FR','FR','rpm','#f5d06b'],['T','T','°C','#e9e2e4']];
+ let s='<rect x="0" y="0" width="340" height="230" rx="14" fill="#0b0f12"/>';
+ s+='<path d="M14 40 h40 l6 -4 l5 4 h10 l4 10 l6 -34 l6 40 l4 -12 h12 l8 -6 l8 6 h44 l6 -4 l5 4 h10 l4 10 l6 -34 l6 40 l4 -12 h12 l8 -6 l8 6 h44" fill="none" stroke="#5ee08a" stroke-width="2.2" stroke-linejoin="round"/>';
+ P.forEach((p,i)=>{
+  const col=i%2,row=Math.floor(i/2),x=12+col*162,y=66+row*54,w=i===4?316:154;
+  const on=hint&&alt.includes(p[0]);
+  s+='<rect x="'+x+'" y="'+y+'" width="'+w+'" height="48" rx="8" fill="#141a1f" stroke="'+(on?'#ffb020':'#222b31')+'" stroke-width="'+(on?3:1)+'"/>';
+  s+='<text x="'+(x+10)+'" y="'+(y+18)+'" fill="'+p[3]+'" font-size="13" font-weight="700">'+p[1]+'</text>';
+  s+='<text x="'+(x+10)+'" y="'+(y+40)+'" fill="#8d979c" font-size="11">'+p[2]+'</text>';
+  s+='<text x="'+(x+w-10)+'" y="'+(y+38)+'" fill="'+p[3]+'" font-size="28" font-weight="700" text-anchor="end">'+esc(v[p[0]]||'--')+'</text>';
+  if(on)s+='<text x="'+(x+w-10)+'" y="'+(y+14)+'" fill="#ffb020" font-size="11" font-weight="700" text-anchor="end">fuera de rango</text>';
+ });
+ return SV('0 0 340 230',s,'Monitor: '+P.map(p=>p[1]+' '+(v[p[0]]||'sin dato')).join(', '));
+}
+/* Útero palpado sobre el abdomen. tone 0: blando y alto; tone 1: contraído y bajo el ombligo. */
+function uterusSVG(m,hint){
+ const soft=!m.tone;
+ let s='<path d="M60 220 C40 150 70 40 170 30 C270 40 300 150 280 220" fill="#2a1a20" stroke="#d9b8c2" stroke-width="2"/>';
+ s+='<line x1="120" y1="212" x2="220" y2="212" stroke="#d9b8c2" stroke-width="4" stroke-linecap="round"/>';
+ s+='<circle cx="170" cy="112" r="6" fill="none" stroke="#d9b8c2" stroke-width="2.5"/>';
+ if(soft)s+='<path d="M110 205 C95 140 110 70 170 62 C230 70 245 140 230 205 Z" fill="#c04a6a55" stroke="#ff9db5" stroke-width="3" stroke-dasharray="7 6"/>';
+ else s+='<path d="M130 205 C122 175 132 140 170 136 C208 140 218 175 210 205 Z" fill="#c04a6a99" stroke="#ff9db5" stroke-width="3.5"/>';
+ s+='<path d="M'+(soft?150:155)+' '+(soft?58:132)+' q15 -12 30 0" fill="none" stroke="#f5d06b" stroke-width="2.5"/>';
+ s+='<text x="170" y="'+(soft?52:126)+'" fill="#f5d06b" font-size="12" text-anchor="middle">mano en el fondo</text>';
+ if(hint){
+  s+='<text x="182" y="116" fill="#ffb020" font-size="13" font-weight="700">ombligo</text>';
+  s+='<text x="170" y="232" fill="#ffb020" font-size="13" font-weight="700" text-anchor="middle">sínfisis del pubis</text>';
+  s+='<text x="12" y="22" fill="#ffb020" font-size="13" font-weight="700">'+(soft?'Fondo blando, sobre el ombligo':'Fondo firme, bajo el ombligo')+'</text>';
+ }
+ return SV('0 0 340 240',s,soft?'Útero blando con el fondo por encima del ombligo':'Útero contraído por debajo del ombligo');
+}
+/* Bolsa colectora calibrada. */
+function bagSVG(m,hint){
+ const ml=m.ml||0,top=30,bot=210,max=2000,y=bot-(bot-top)*Math.min(ml,max)/max;
+ let s='<path d="M110 20 h120 l-6 196 q-54 18 -108 0 Z" fill="#1d1418" stroke="#d9b8c2" stroke-width="2"/>';
+ s+='<clipPath id="bgc"><path d="M110 20 h120 l-6 196 q-54 18 -108 0 Z"/></clipPath>';
+ s+='<rect x="100" y="'+y+'" width="140" height="'+(bot-y+30)+'" fill="#a3203f" clip-path="url(#bgc)"/>';
+ for(let v=250;v<=max;v+=250){const yy=bot-(bot-top)*v/max;s+='<line x1="230" y1="'+yy+'" x2="'+(v%500?242:250)+'" y2="'+yy+'" stroke="#d9b8c2" stroke-width="2"/>'+(v%500?'':'<text x="256" y="'+(yy+4)+'" fill="#d9b8c2" font-size="12">'+v+' mL</text>')}
+ if(hint){const yu=bot-(bot-top)*500/max;s+='<line x1="96" y1="'+yu+'" x2="244" y2="'+yu+'" stroke="#ffb020" stroke-width="2.5" stroke-dasharray="6 4"/><text x="92" y="'+(yu+4)+'" fill="#ffb020" font-size="12" font-weight="700" text-anchor="end">umbral 500 mL</text><text x="170" y="'+(y-8)+'" fill="#ffb020" font-size="14" font-weight="700" text-anchor="middle">'+ml+' mL</text>'}
+ return SV('0 0 340 240',s,'Bolsa colectora calibrada con '+ml+' mL');
+}
+/* Roles del Código Rojo alrededor de la cama. */
+function rolesSVG(){
+ let s='<rect x="120" y="20" width="100" height="200" rx="14" fill="#1d1418" stroke="#d9b8c2" stroke-width="2"/>';
+ s+='<circle cx="170" cy="52" r="16" fill="#3a2a30" stroke="#d9b8c2" stroke-width="2"/><path d="M146 76 h48 v100 h-48 Z" fill="#3a2a30" stroke="#d9b8c2" stroke-width="2"/>';
+ s+='<g font-size="13" font-weight="700" text-anchor="middle">';
+ s+='<rect x="105" y="-30" width="130" height="40" rx="10" fill="#5fd3f0"/><text x="170" y="-14" fill="#062028">Cabeza</text><text x="170" y="2" fill="#062028" font-weight="400">Anestesia</text>';
+ s+='<rect x="232" y="92" width="104" height="40" rx="10" fill="#f5d06b"/><text x="284" y="108" fill="#2a2000">Brazo</text><text x="284" y="124" fill="#2a2000" font-weight="400">Enfermería</text>';
+ s+='<rect x="105" y="226" width="130" height="40" rx="10" fill="#ff8a8a"/><text x="170" y="242" fill="#2a0606">Pelvis</text><text x="170" y="258" fill="#2a0606" font-weight="400">Obstetricia, líder</text>';
+ s+='<line x1="220" y1="112" x2="232" y2="112" stroke="#f5d06b" stroke-width="3"/>';
+ s+='</g>';
+ return SV('0 -36 340 308',s,'Roles del Código Rojo: cabeza anestesia, brazo enfermería, pelvis obstetricia');
+}
+function badgeSVG(n,on){
+ const c=on?'#9b2547':'#9a8a8f';
+ return '<svg width="44" height="44" viewBox="0 0 44 44" aria-hidden="true"><circle cx="22" cy="22" r="19" fill="'+(on?'#fbe3ea':'none')+'" stroke="'+c+'" stroke-width="3"'+(on?'':' stroke-dasharray="4 4"')+'/><text x="22" y="28" text-anchor="middle" font-size="17" font-weight="700" fill="'+c+'" font-family="system-ui,sans-serif">'+n+'</text></svg>';
+}
+/* ---------- Estado y utilidades ---------- */
+const $app=document.getElementById('app');
+const KEY='eoe-v1';
+let S=null,R=null,V=null;
+try{S=JSON.parse(localStorage.getItem(KEY)||'null')}catch(e){S=null}
+const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}};
+const wipe=()=>{try{localStorage.removeItem(KEY)}catch(e){}};
+const $=id=>document.getElementById(id);
+function esc(s){return String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]))}
+const ver=s=>esc(s).replace(/\[VERIFICAR[^\]]*\]/g,m=>'<span class="ver">'+m+'</span>');
+const mmss=t=>{t=Math.max(0,Math.ceil(t));return Math.floor(t/60)+':'+String(t%60).padStart(2,'0')};
+const put=(h,sc)=>{$app.innerHTML=h;if(sc!==false)window.scrollTo(0,0)};
+const shuffle=a=>{a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a};
+const on=(sel,fn)=>document.querySelectorAll(sel).forEach(fn);
+const FMT={corto:[2,1,1,1,3],completo:[3,2,2,2,5]};
+function makePlan(f){return LV.map((l,k)=>{const ids=CASES.filter(c=>c.lv===k).map(c=>c.id);if(k===4)return f==='corto'?[ids[0],ids[2],ids[3]]:ids;return shuffle(ids).slice(0,FMT[f][k])})}
+function stop(){if(R&&R.timer){clearInterval(R.timer);R.timer=null}}
+const heartsN=n=>'♥'.repeat(Math.max(0,n))+'<i>'+'♥'.repeat(Math.max(0,5-n))+'</i>';
+const hearts=()=>heartsN(S.lives);
+/* ---------- Sala en vivo (capacidad room) ---------- */
+let ROOM=null,ROOMC=null,MODE=null,WAIT='',HJ=false,FT=null,FP=null,FOLLOW='',UNS=null,lastPres=null,FK=null;
+/* Fuera de Claude la sala funciona con una función propia del sitio (/api/room): quien coordina publica el estado y el resto lo consulta cada 2 segundos. */
+const rndId=n=>{const a='abcdefghijklmnopqrstuvwxyz0123456789';let s='';for(let i=0;i<n;i++)s+=a[Math.floor(Math.random()*a.length)];return s};
+const NETROOM={join:async(name,opt)=>{
+ const code=name.replace(/^eoe-/,''),isHost=!!(opt&&opt.host),cbs=new Set();
+ let dead=false,busy=false,pend=null,n=0,hostObj=null,lastT=0,hbAt=0,iv=null,key='';
+ const me={isMe:true,presence:null,updatedAt:Date.now()};
+ const fire=()=>cbs.forEach(f=>{try{f()}catch(e){}});
+ const api=async(method,q,body)=>{
+  const t0=Date.now();
+  const res=await fetch('/api/room'+q,{method,cache:'no-store',headers:body?{'content-type':'application/json'}:{},body:body?JSON.stringify(body):undefined});
+  if(!res.ok)throw new Error('sala '+res.status);
+  const d=await res.json();d.off=(t0+Date.now())/2-d.now;return d;
+ };
+ const setN=d=>{if(typeof d.n==='number'&&d.n!==n){n=d.n;fire()}};
+ const pump=async()=>{
+  if(busy||dead)return;busy=true;
+  try{while(pend&&!dead){const x=pend;pend=null;
+   try{setN(await api('POST','',{r:'eoe-'+code,k:key,p:x.p}));x.w.forEach(f=>f[0]())}catch(e){x.w.forEach(f=>f[1](e))}}}
+  finally{busy=false}
+ };
+ const beat=async()=>{
+  if(busy||dead||pend||!me.presence)return;busy=true;
+  try{setN(await api('POST','',{r:'eoe-'+code,k:key}))}catch(e){}finally{busy=false}
+  if(pend)pump();
+ };
+ const vid=rndId(12);
+ const take=d=>{
+  const h=d.host&&d.now-d.host.a<40000?d.host:null;
+  if(!h){if(hostObj){hostObj=null;lastT=0;fire()}}
+  else if(h.t!==lastT){lastT=h.t;hostObj={isMe:false,presence:h.p,updatedAt:h.t+d.off};fire()}
+ };
+ const ask=async()=>{const hb=Date.now()-hbAt>15000;const d=await api('GET','?r=eoe-'+code+'&v='+vid+(hb?'&hb=1':''));if(hb)hbAt=Date.now();return d};
+ const poll=async()=>{
+  if(busy||dead||document.hidden)return;busy=true;
+  try{take(await ask())}catch(e){}finally{busy=false}
+ };
+ const vis=()=>{if(!document.hidden)(isHost?beat:poll)()};
+ if(isHost){
+  try{const o=JSON.parse(localStorage.getItem('eoe-hk')||'null');if(o&&o.c===code&&o.k)key=o.k}catch(e){}
+  if(!key){key=rndId(24);try{localStorage.setItem('eoe-hk',JSON.stringify({c:code,k:key}))}catch(e){}}
+  iv=setInterval(beat,10000);
+ }else{
+  take(await ask());
+  iv=setInterval(poll,2000);
+ }
+ document.addEventListener('visibilitychange',vis);
+ return{
+  name,
+  peers:()=>isHost?[me].concat(Array.from({length:n},()=>({isMe:false,presence:null,updatedAt:0}))):(hostObj?[hostObj]:[]),
+  presence:p=>new Promise((ok,no)=>{me.presence=p;me.updatedAt=Date.now();if(pend){pend.p=p;pend.w.push([ok,no])}else pend={p,w:[[ok,no]]};pump()}),
+  onPeers:f=>{cbs.add(f);return()=>cbs.delete(f)},
+  leave:async()=>{dead=true;clearInterval(iv);document.removeEventListener('visibilitychange',vis);cbs.clear()}
+ };
+}};
+(async()=>{try{if(window.claude&&window.claude.use)ROOM=await window.claude.use('room')}catch(e){ROOM=null}if(!ROOM&&location.protocol.startsWith('http')&&!/claude|anthropic/.test(location.hostname)){try{const t=await fetch('/api/room?r=eoe-test',{cache:'no-store'});if(t.ok&&/json/.test(t.headers.get('content-type')||''))ROOM=NETROOM}catch(e){}}})();
+const rand4=()=>{const a='abcdefghjkmnpqrstuvwxyz23456789';let s='';for(let i=0;i<4;i++)s+=a[Math.floor(Math.random()*a.length)];return s};
+const watchers=()=>ROOMC?ROOMC.peers().filter(p=>!p.isMe).length:0;
+async function joinCode(code,host){
+ if(!ROOM)return null;
+ try{
+  const nm='eoe-'+code;
+  if(ROOMC&&ROOMC.name===nm)return ROOMC;
+  if(ROOMC){try{await ROOMC.leave()}catch(e){}ROOMC=null}
+  ROOMC=await ROOM.join(nm,{host:!!host});
+  return ROOMC;
+ }catch(e){ROOMC=null;return null}
+}
+function ensureHost(){
+ if(!ROOM||!S||!S.code||HJ||(ROOMC&&ROOMC.name==='eoe-'+S.code))return;
+ HJ=true;
+ joinCode(S.code,true).then(r=>{HJ=false;if(r){r.onPeers(()=>{const e=$('wc');if(e)e.textContent=watchers()});sync()}}).catch(()=>{HJ=false});
+}
+function wait(m){WAIT=m;sync()}
+function sync(){
+ if(!ROOMC||!S||!S.code||MODE==='follow'||ROOMC.name!=='eoe-'+S.code)return;
+ let p;
+ if(R&&!R.closing){const c=R.c;p={host:1,scr:'round',id:c.id,qi:R.qi,tk:R.tk,perm:R.perm,a:R.ans===null?-1:R.ans,hid:R.hid,hint:R.hint?1:0,left:Math.round(R.left),fr:Math.round(R.freeze),lives:S.lives,score:S.score,lv:S.lv,ri:S.ri,n:S.plan[S.lv].length,head:(R.head||'').slice(0,80),rc:S.rc,nm:S.names,msg:R.msg?String(R.msg[1]).slice(0,200):'',mt:R.msg?R.msg[0]:'',ck:R.k.d?R.k.m.join(''):'',m:''}}
+ else p={host:1,scr:'wait',m:WAIT,lives:S.lives,score:S.score,lv:S.lv};
+ try{ROOMC.presence(p).catch(()=>{})}catch(e){}
+}
+function imgHTML(m,hint){
+ if(!m)return'';
+ if(m.k==='tags')return '<div>'+m.items.map(t=>'<div class="tag">'+esc(t)+'</div>').join('')+'</div>'+(m.cap?'<div class="cap">'+esc(m.cap)+'</div>':'');
+ if(m.k==='pic')return '<figure class="photo"><img src="img/'+m.f+'.jpg" alt="'+esc(m.alt||m.cap||'Ilustración del caso')+'" loading="lazy"></figure>'+(m.cap?'<div class="cap">'+esc(m.cap)+'</div>':'');
+ let s='';
+ if(m.k==='mon')s=monSVG(m,hint);else if(m.k==='uterus')s=uterusSVG(m,hint);else if(m.k==='bag')s=bagSVG(m,hint);else if(m.k==='roles')s=rolesSVG();
+ return '<div class="imgbox">'+s+'</div>'+(m.cap?'<div class="cap">'+esc(m.cap)+'</div>':'');
+}
+function tableHTML(rows){return rows&&rows.length?'<div class="card"><table class="t">'+rows.map(r=>'<tr'+(r[2]?' class="alt"':'')+'><td>'+esc(r[0])+'</td><td>'+ver(r[1])+(r[2]?' <span class="flag">fuera de rango</span>':'')+'</td></tr>').join('')+'</table></div>':''}
+/* Imagen y datos que se muestran en cada caso o toma. Los signos vitales van a la tabla; la segunda mirada marca los que están fuera de rango. */
+const VL={TA:['TA','mmHg'],FC:['FC','lpm'],FR:['FR','rpm'],SpO2:['SpO2','%'],T:['Temperatura','°C']};
+function caseView(c,tk,hint){
+ const tom=c.tomas?c.tomas[tk]:null,m=tom?tom.img:c.img,rows=(tom?tom.rows:c.rows)||[],mon=m&&m.k==='mon';
+ const vr=mon?Object.keys(VL).filter(k=>m.v[k]).map(k=>[VL[k][0],m.v[k]+' '+VL[k][1],!!hint&&(m.alt||[]).includes(k)]):[];
+ const img=PIC[c.id]?{k:'pic',f:PIC[c.id],alt:c.t}:(mon?null:m);
+ return{img,rows:vr.concat(rows),canHint:mon&&(m.alt||[]).length>0};
+}
+/* ---------- Rol de quien observa: tarjeta del paquete de medidas, escena y checklist ---------- */
+const ico=id=>'<span class="ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="'+IT[id][2]+'"/></svg></span>';
+function bundleOpen(e){
+ let cur=ST[e]?e:'hpp';const old=$('ov');if(old)old.remove();
+ const ov=document.createElement('div');ov.id='ov';ov.className='ov noprint';ov.setAttribute('role','dialog');ov.setAttribute('aria-modal','true');ov.setAttribute('aria-label','Tarjeta del paquete de medidas');
+ const key=ev=>{if(ev.key==='Escape')close()};
+ const close=()=>{document.removeEventListener('keydown',key);ov.remove()};
+ const draw=()=>{
+  const st=ST[cur];
+  ov.innerHTML='<div class="ovc"><h2>Paquete de medidas: '+esc(st.n)+'</h2><p class="muted">Es la referencia para comparar con la escena. La puede mirar todo el equipo.</p>'
+  +'<div class="chips">'+Object.keys(ST).map(k=>'<button class="chip" data-e="'+k+'" aria-pressed="'+(k===cur)+'">'+ST[k].n+'</button>').join('')+'</div>'
+  +(st.img?imgHTML(st.img):'')+'<ul class="bl">'+st.it.map(k=>'<li>'+ico(k)+'<span>'+ver(IT[k][1]||IT[k][0])+'</span></li>').join('')+'</ul>'
+  +(st.nota?'<p class="muted">'+ver(st.nota)+'</p>':'')+'<button class="btn" id="ovx">Cerrar</button></div>';
+  ov.querySelectorAll('[data-e]').forEach(b=>b.onclick=()=>{cur=b.dataset.e;draw()});
+  ov.querySelector('#ovx').onclick=close;
+ };
+ ov.onclick=ev=>{if(ev.target===ov)close()};
+ document.addEventListener('keydown',key);
+ draw();document.body.appendChild(ov);ov.querySelector('#ovx').focus({preventScroll:true});ov.scrollTop=0;
+}
+const obsWho=(nm,rc)=>nm&&nm.length>1?nm[(rc+2)%nm.length]:'';
+/* Compara las marcas con el estado correcto de cada ítem. Solo penaliza marcar No cumple donde no hay falla. Lo que queda sin marcar no suma ni resta. */
+function ckEval(c,m){
+ const k=c.ck;let hit=0,miss=0,fa=0,nf=0;
+ const rows=ST[k.e].it.map((id,i)=>{
+  const t=k.v[i],x=m[i]||0;let r;
+  if(t===2){nf++;if(x===2){r='hit';hit++}else{r='miss';miss++}}
+  else if(x===2){r='fa';fa++}
+  else r=!x?'nm':x===t?'ok':'rev';
+  return{id,t,x,r,n:(k.n&&k.n[i])||DEFN[t]};
+ });
+ return{rows,hit,miss,fa,nf};
+}
+function obsHTML(c,st,mode,who){
+ const k=c.ck;
+ let h='<div class="card obs"><h3>Quien observa'+(who?': '+esc(who):'')+'</h3>';
+ if(!k)return h+'<p>En este caso no hay escena para observar: acompañá la valoración y revisá la respuesta antes de que se marque.</p><button class="btn sec sm" data-b="hpp">Ver paquetes de medidas</button></div>';
+ const its=ST[k.e].it,m=st.off||st.m,done=st.d||!!st.off;
+ h+='<p>Compará lo que pasa en la escena con el paquete de medidas. Tildá cada ítem y confirmá. Si algo no se cumple, el equipo hace una pausa.</p>'
+ +'<button class="btn sec sm" data-b="'+k.e+'">Ver paquete de medidas: '+esc(ST[k.e].n)+'</button>'
+ +'<h3 class="sct">Escena: '+esc(k.tt)+'</h3>'+imgHTML(k.img)+'<ol class="seq">'+k.st.map(x=>'<li>'+ver(x)+'</li>').join('')+'</ol>'
+ +'<p class="muted">'+ver(k.pie)+'</p>'
+ +'<details class="ckd" id="ckd"'+(st.o?' open':'')+'><summary>'+(done?'Devolución del checklist':'Checklist para tildar: <span id="ckn">'+its.filter((x,i)=>m[i]).length+'</span> de '+its.length)+'</summary>';
+ if(done){
+  const own=mode==='follow'&&st.m.some(Boolean),eo=ckEval(c,m),e=own?ckEval(c,st.m):eo,lab=own?'Tu marca: ':'Marca: ';
+  h+='<p><b>Fallas detectadas'+(mode==='follow'?' por el equipo':'')+': '+eo.hit+' de '+eo.nf+'.</b>'+(eo.fa?' Falsas alarmas: '+eo.fa+'.':'')+'</p>';
+  if(mode==='follow')h+='<p class="muted">'+(own?'Abajo va la devolución de tus marcas, las que tildaste en tu pantalla.':'Abajo van las marcas que confirmó quien coordina.')+'</p>';
+  e.rows.forEach(r=>{h+='<div class="ckr"><div class="ckl">'+ico(r.id)+'<span>'+esc(IT[r.id][0])+'</span></div><span class="rt '+r.r+'">'+RT[r.r]+'</span><span>'+(r.x?lab+MK[r.x]+'. ':'')+(r.x!==r.t?'Correcto: '+MK[r.t]+'.':'')+'</span><div class="muted">'+ver(r.n)+'</div></div>'});
+  if(mode==='solo')h+='<button class="btn sec sm" id="ckx">Volver a tildar</button>';
+ }else{
+  h+='<p class="muted">No cumple: la escena muestra que se hizo mal o que se salteó. No se observa: la escena no llega a mostrarlo.</p>';
+  its.forEach((id,i)=>{h+='<div class="cki"><div class="ckl">'+ico(id)+'<span>'+esc(IT[id][0])+'</span></div><div class="seg" role="group" aria-label="'+esc(IT[id][0])+'">'+[1,2,3].map(v=>'<button type="button" class="sg" data-k="'+i+'" data-v="'+v+'" aria-pressed="'+(m[i]===v)+'">'+MK[v]+'</button>').join('')+'</div></div>'});
+  if(mode==='follow')h+='<p class="muted">Tus marcas quedan en tu pantalla. Decí en voz alta lo que no se cumple: la pausa vale cuando la confirma quien coordina. Después vas a ver la devolución de tus marcas.</p>';
+  else h+='<button class="btn sm" id="ckc">'+(mode==='host'?'Confirmar sin pedir pausa':'Comparar con la escena')+'</button><p class="muted" id="ckh"></p>'
+  +(mode==='host'?'<p class="muted">La pausa es por una falla de seguridad de la paciente: un ítem del paquete de medidas que no se cumple. Cada falla real detectada suma '+CK_PTS+' puntos y cada falsa alarma descuenta '+CK_SEG+' segundos. Si quien observa tilda en su celular, alcanza con marcar acá lo que diga que no se cumple.</p>':'');
+ }
+ return h+'</details></div>';
+}
+function obsBind(c,st,mode,onOk){
+ on('[data-b]',b=>b.onclick=()=>bundleOpen(b.dataset.b));
+ const d=$('ckd');if(d)d.ontoggle=()=>{st.o=d.open};
+ if(!c.ck||st.d||st.off)return;
+ const n=ST[c.ck.e].it.length,ok=$('ckc'),hint=$('ckh'),cn=$('ckn');
+ const upd=()=>{
+  let f=0,p=0;for(let i=0;i<n;i++){if(!st.m[i])f++;else if(st.m[i]===2)p++}
+  if(cn)cn.textContent=n-f;
+  if(ok&&mode==='host')ok.textContent=p?'Confirmar y pedir pausa de seguridad':'Confirmar sin pedir pausa';
+  if(hint)hint.textContent=f?(f===1?'Falta 1 ítem por tildar.':'Faltan '+f+' ítems por tildar.')+' Se puede confirmar igual: lo que quede sin marcar no suma ni resta.':'';
+ };
+ on('.sg',b=>b.onclick=()=>{
+  const i=+b.dataset.k,v=+b.dataset.v;st.m[i]=st.m[i]===v?0:v;
+  on('.sg[data-k="'+i+'"]',x=>x.setAttribute('aria-pressed',+x.dataset.v===st.m[i]));upd();
+ });
+ if(ok)ok.onclick=()=>{if(onOk)onOk()};
+ upd();
+}
+
+/* ---------- Inicio ---------- */
+function home(){
+ stop();R=null;V=null;MODE=null;clearInterval(FT);FT=null;
+ if(S&&S.code&&ROOMC)wait('El coordinador volvió al inicio.');
+ const act=S&&!S.done;
+ put('<h1>Emergencias Obstétricas en Equipo</h1><p class="muted">Juego cooperativo de capacitación para equipos de obstetricia y enfermería, de 2 a 6 personas. Los casos son ficticios.</p>'
+ +(act?'<button class="btn" id="resume">Continuar la partida</button>':'')
+ +'<button class="btn'+(act?' sec':'')+'" id="coord">Coordinar el juego</button>'
+ +'<button class="btn sec" id="view">Ver el caso en mi celular</button>'
+ +'<button class="btn sec sm" id="rules">Cómo se juega</button>'
+ +'<p class="muted">Es un entrenamiento y no reemplaza el protocolo del servicio. Los contenidos siguen las recomendaciones de la OPS 2024 para las principales emergencias obstétricas y la definición de hemorragia posparto de la OMS 2025. La partida se guarda solo en este celular.</p>');
+ if(act)$('resume').onclick=resume;
+ $('coord').onclick=setup;$('view').onclick=viewerPick;$('rules').onclick=rules;
+}
+function rules(){
+ put('<h2>Cómo se juega</h2>'
+ +'<p>Una persona coordina desde su celular. El resto abre la opción Ver el caso en mi celular y toca el mismo caso que quien coordina dice en voz alta, por ejemplo 2.3, para mirar las imágenes de cerca.</p>'
+ +'<p>En cada ronda hay cuatro roles que rotan: quien lee el caso, quien valora, quien observa el checklist y quien comunica con SBAR. La respuesta vale cuando la marca quien comunica.</p>'
+ +'<p>Quien observa compara la escena con el paquete de medidas que corresponde (Código Rojo, HTA severa o sepsis materna). Tilda cada ítem como Cumple, No cumple o No se observa, y confirma. Si la escena muestra que algo se hizo mal o que se salteó un paso, va No cumple. Si la escena no llega a mostrarlo, va No se observa. Si algo no se cumple, el equipo hace una pausa por una falla de seguridad de la paciente. Cada falla real detectada suma '+CK_PTS+' puntos y cada falsa alarma descuenta '+CK_SEG+' segundos. Las rondas con escena tienen '+CK_EXTRA+' segundos más.</p>'
+ +'<p>Quien observa puede tildar en su propio celular y decir en voz alta lo que no se cumple. La pausa vale cuando se confirma en el celular de quien coordina. Después, cada persona ve la devolución de sus marcas.</p>'
+ +'<p>Hay escena para observar en estos casos: '+CASES.filter(c=>c.ck).map(c=>c.id).join(', ')+'. En el resto, quien observa acompaña la valoración y revisa la respuesta antes de que se marque.</p>'
+ +'<button class="btn sec sm" data-b="hpp">Ver paquetes de medidas</button>'
+ +'<p>Cada caso trae tres preguntas: identificar vale 10 puntos, interpretar 20 y la intervención prioritaria 30. Terminar sin errores antes de la mitad del tiempo suma 10, y un SBAR completo suma otros 10.</p>'
+ +'<p>El equipo tiene 5 vidas. Un error crítico, como no activar el Código Rojo o seguir con el magnesio en una intoxicación, resta una. Si se acaban, hay una reanimación del equipo: se repite el nivel con 3 vidas y la mitad del puntaje.</p>'
+ +'<p>Cada nivel superado da una insignia y una tarjeta de ayuda de un solo uso: segunda mirada, pausa de equipo, consulta al especialista o escudo. Para pasar de nivel hace falta el 60% del puntaje de las preguntas.</p>'
+ +'<button class="btn" id="bk">Volver</button>');
+ $('bk').onclick=home;on('[data-b]',b=>b.onclick=()=>bundleOpen(b.dataset.b));
+}
+
+/* ---------- Partida nueva ---------- */
+function setup(){
+ let fmt='corto';
+ put('<h2>Nueva partida</h2><p>Escribí los nombres separados por coma, o dejalo vacío para empezar sin nombres.</p>'
+ +'<input type="text" id="nm" placeholder="Ana, Beto, Carla" autocomplete="off" aria-label="Nombres de las personas">'
+ +'<h3 style="margin-top:16px">Formato</h3><div class="chips"><button class="chip" aria-pressed="true" data-f="corto">Corto, unos 35 min</button><button class="chip" aria-pressed="false" data-f="completo">Completo, unos 60 min</button></div>'
+ +'<button class="btn" id="go">Empezar</button><button class="btn sec" id="bk">Volver</button>');
+ on('[data-f]',b=>b.onclick=()=>{fmt=b.dataset.f;on('[data-f]',x=>x.setAttribute('aria-pressed',x===b))});
+ $('bk').onclick=home;
+ $('go').onclick=()=>{
+  const names=$('nm').value.split(',').map(x=>x.trim()).filter(Boolean).slice(0,6);
+  S={names,fmt,lv:0,ri:0,rc:0,score:0,lives:5,badges:[],cards:[],shield:false,review:[],plan:makePlan(fmt),lvBase:0,lvScore:0,half:false,done:false,code:rand4()};
+  save();levelIntro();
+ };
+}
+function resume(){stop();if(!S.code){S.code=rand4();save()}if(S.lives<=0)rescue();else levelIntro()}
+function levelIntro(){
+ stop();ensureHost();const k=S.lv,L=LV[k],n=S.plan[k].length,mx=n*60*(S.half?.5:1),min=Math.ceil(.6*mx);
+ wait('Nivel '+(k+1)+'. '+L.n+'. El coordinador está por empezar.');
+ put('<h2>Nivel '+(k+1)+'. '+L.n+'</h2><p>'+L.f+'</p>'
+ +'<div class="card"><table class="t"><tr><td>Rondas</td><td>'+n+'</td></tr><tr><td>Tiempo por ronda</td><td>'+(L.t>=120?(L.t/60).toString().replace('.',',')+' min':L.t+' s')+'</td></tr>'+(S.plan[k].some(id=>CASES.find(c=>c.id===id).ck)?'<tr><td>Rondas con escena</td><td>'+CK_EXTRA+' s más</td></tr>':'')+'<tr><td>Mínimo para avanzar</td><td>'+min+' puntos</td></tr><tr><td>Insignia</td><td>'+L.b+'</td></tr></table></div>'
+ +(S.half?'<div class="fb warn"><strong>Reanimación del equipo</strong>En este nivel hay 3 vidas y la mitad del puntaje.</div>':'')
+ +(ROOM&&S.code?'<div class="card"><h3>Sala en vivo</h3><p class="muted">Para que el resto siga el caso en su celular: abren este mismo enlace, eligen Ver el caso en mi celular y escriben el código. Solo quien coordina responde.</p><div class="big" style="letter-spacing:6px">'+S.code.toUpperCase()+'</div></div>':'')
+ +'<div class="hud" style="position:static;border:0"><span class="hearts" aria-label="'+S.lives+' vidas">'+hearts()+'</span><span><b>'+S.score+'</b> puntos</span></div>'
+ +'<button class="btn" id="go">'+(S.ri?'Seguir en la ronda '+(S.ri+1):'Empezar nivel')+'</button><button class="btn sec" id="hm">Salir al inicio</button>');
+ $('go').onclick=startRound;$('hm').onclick=home;
+}
+/* ---------- Ronda ---------- */
+function startRound(){
+ stop();ensureHost();
+ const c=CASES.find(x=>x.id===S.plan[S.lv][S.ri]),t=LV[S.lv].t+(c.ck?CK_EXTRA:0);
+ R={c,qi:0,tk:0,tot:t,left:t,err:0,freeze:0,hint:false,hid:[],ans:null,perm:shuffle([0,1,2,3]),k:{m:[],d:false,o:false},msg:null,timed:false,sbar:[0,0,0,0],closing:false,last:Date.now(),pts:0,head:''};
+ S.rc++;save();
+ R.timer=setInterval(tick,250);
+ drawRound(true);
+}
+function tick(){
+ if(!R||R.closing)return;
+ const n=Date.now(),dt=(n-R.last)/1000;R.last=n;
+ if(R.ans===null){if(R.freeze>0)R.freeze=Math.max(0,R.freeze-dt);else R.left-=dt}
+ const e=$('tm');
+ if(e){e.textContent=(R.freeze>0?'Pausa ':'')+mmss(R.freeze>0?R.freeze:R.left);e.classList.toggle('low',R.freeze===0&&R.left<20)}
+ if(R.left<=0){R.timed=true;R.left=0;closeRound()}
+}
+function rolesHTML(nm,rc){
+ nm=nm||S.names;rc=rc==null?S.rc:rc;
+ const n=nm.length,r=['Lee el caso','Valora','Observa el checklist','Comunica con SBAR'];
+ if(n<2)return '<div class="muted">Roles de la ronda: lee, valora, observa el checklist y comunica.</div>';
+ return '<div class="roles">'+r.map((x,j)=>'<span>'+x+'</span><b>'+esc(nm[(rc+j)%n])+'</b>').join('')+'</div>';
+}
+function hudHTML(){
+ return '<div class="hud"><div><b>Nivel '+(S.lv+1)+'</b><div class="muted">Ronda '+(S.ri+1)+' de '+S.plan[S.lv].length+'</div></div>'
+ +'<div style="text-align:center"><div class="tm" id="tm">'+mmss(R.freeze>0?R.freeze:R.left)+'</div>'+(S.code&&ROOM?'<div class="muted">Sala '+S.code.toUpperCase()+', <span id="wc">'+watchers()+'</span> viendo</div>':'')+'</div>'
+ +'<div style="text-align:right"><div class="hearts" aria-label="'+S.lives+' vidas">'+hearts()+'</div><div class="muted"><b>'+S.score+'</b> puntos'+(S.shield?', escudo activo':'')+'</div></div></div>';
+}
+function drawRound(sc){
+ if(!R)return;
+ const c=R.c,q=c.q[R.qi],cv=caseView(c,R.tk,R.hint),img=cv.img,rows=cv.rows,done=R.ans!==null;
+ let h=hudHTML()+'<h2 style="margin-top:12px">'+c.id+' '+esc(c.t)+'</h2>'+rolesHTML()+'<p>'+esc(c.ctx)+'</p>'+imgHTML(img);
+ if(c.tomas)h+='<div class="chips">'+c.tomas.map((t,i)=>'<button class="chip" data-t="'+i+'" aria-pressed="'+(i===R.tk)+'">Toma '+(i+1)+', '+t.h+'</button>').join('')+'</div>';
+ h+=tableHTML(rows);
+ h+=obsHTML(c,R.k,'host',obsWho(S.names,S.rc));
+ h+='<div id="msg">'+(R.msg?'<div class="fb '+R.msg[0]+'">'+esc(R.msg[1])+'</div>':'')+'</div>';
+ h+='<div class="card"><div class="qn">Pregunta '+(R.qi+1)+' de 3, '+QL[R.qi]+'</div><h3>'+esc(q.q)+'</h3>';
+ R.perm.forEach(i=>{
+  let cl='opt';if(done){if(i===0)cl+=' ok';else if(i===R.ans)cl+=' bad'}
+  h+='<button class="'+cl+'" type="button" data-i="'+i+'"'+(R.hid.includes(i)?' hidden':'')+(done?' disabled':'')+'>'+esc(q.o[i])+'</button>';
+ });
+ h+='</div>';
+ if(done){
+  const ok=R.ans===0;
+  h+='<div class="fb '+(ok?'ok':'bad')+'"><strong>'+esc(R.head)+'</strong>'+(ok?'':'Respuesta correcta: <b>'+esc(q.o[0])+'</b>.<br>')+ver(q.w)+'<div class="src">Fuente: '+ver(q.s)+'</div></div>'
+  +'<button class="btn" id="nx">'+(S.lives<=0?'Continuar':(R.qi>=2?'Cerrar la ronda':'Siguiente pregunta'))+'</button>';
+ } else if(S.cards.length){
+  h+='<h3>Tarjetas de ayuda</h3><div class="cards">'+S.cards.map(k=>{
+   const cd=CARDS.find(x=>x.k===k);
+   const dis=(k==='segunda'&&(R.hint||!cv.canHint))||(k==='pausa'&&R.freeze>0)||(k==='consulta'&&R.hid.length>0)||(k==='escudo'&&S.shield);
+   return '<button class="cbtn" data-c="'+k+'"'+(dis?' disabled':'')+'><b>'+cd.n+'</b><small>'+cd.d+'</small></button>';
+  }).join('')+'</div>';
+ }
+ put(h,sc===true);
+ on('[data-i]',b=>b.onclick=()=>answer(+b.dataset.i));
+ on('[data-t]',b=>b.onclick=()=>{R.tk=+b.dataset.t;drawRound(false)});
+ on('[data-c]',b=>b.onclick=()=>useCard(b.dataset.c));
+ obsBind(c,R.k,'host',obsConfirm);
+ if($('nx'))$('nx').onclick=nextQ;
+ sync();
+}
+function answer(i){
+ if(!R||R.ans!==null||R.closing)return;
+ const q=R.c.q[R.qi],h=S.half?.5:1,pts=[10,20,30][R.qi]*h;
+ R.ans=i;
+ if(i===0){R.pts+=pts;S.score+=pts;S.lvBase+=pts;S.lvScore+=pts;R.head='Correcto, suman '+pts+' puntos.'}
+ else{
+  R.err++;
+  const crit=q.c.includes(i);
+  S.review.push({lv:S.lv,ctx:R.c.id+' '+R.c.t,q:q.q,got:q.o[i],ok:q.o[0],why:q.w,src:q.s,crit});
+  if(crit){if(S.shield){S.shield=false;R.head='Error crítico. El escudo evitó perder una vida.'}else{S.lives--;R.head='Error crítico, pierden una vida.'}}
+  else R.head='Respuesta incorrecta, no suman puntos.';
+ }
+ save();drawRound(false);
+}
+function nextQ(){
+ if(S.lives<=0){stop();R=null;rescue();return}
+ R.qi++;
+ if(R.qi>=3){closeRound();return}
+ R.ans=null;R.hid=[];R.perm=shuffle([0,1,2,3]);R.msg=null;R.last=Date.now();
+ drawRound(true);
+}
+function useCard(k){
+ const idx=S.cards.indexOf(k);if(idx<0||R.ans!==null)return;
+ if(k==='segunda'){R.hint=true;R.left+=30}
+ else if(k==='pausa'){R.freeze=60}
+ else if(k==='consulta'){R.hid=shuffle([1,2,3]).slice(0,2)}
+ else if(k==='escudo'){S.shield=true;R.msg=['ok','Escudo activo: absorbe el próximo error crítico.']}
+ S.cards.splice(idx,1);save();drawRound(false);
+}
+function obsConfirm(){
+ if(!R||R.closing||!R.c.ck||R.k.d)return;
+ R.k.m=ST[R.c.ck.e].it.map((x,i)=>R.k.m[i]||0);
+ const e=ckEval(R.c,R.k.m),h=S.half?.5:1,pts=CK_PTS*h*e.hit,asked=R.k.m.some(x=>x===2);
+ R.k.d=true;R.k.o=true;
+ S.score+=pts;S.lvScore+=pts;
+ if(e.fa)R.left=Math.max(1,R.left-CK_SEG*e.fa);
+ let t=e.hit?'Pausa justificada: '+e.hit+' de '+e.nf+(e.nf===1?' falla detectada':' fallas detectadas')+', suman '+pts+' puntos.':asked?'La pausa no encontró ninguna falla real.':'Checklist confirmado sin pausa.';
+ if(e.miss)t+=e.miss===1?' Quedó 1 falla sin detectar.':' Quedaron '+e.miss+' fallas sin detectar.';
+ if(e.fa)t+=(e.fa===1?' Hubo 1 falsa alarma':' Hubo '+e.fa+' falsas alarmas')+': se descuentan '+(CK_SEG*e.fa)+' segundos.';
+ R.msg=[e.hit&&!e.miss&&!e.fa?'ok':(e.nf===0&&!e.fa?'ok':'warn'),t];
+ save();drawRound(false);
+}
+
+/* ---------- Cierre de ronda y nivel ---------- */
+function closeRound(){
+ R.closing=true;stop();
+ R.speed=R.err===0&&!R.timed&&R.left>R.tot/2;
+ drawClose();
+}
+function drawClose(){
+ const c=R.c,ok4=R.sbar.every(Boolean),names=['Situación','Antecedentes','Valoración','Recomendación'];
+ let h='<h2>Cierre de la ronda '+c.id+'</h2>';
+ if(R.timed)h+='<div class="fb warn"><strong>Se acabó el tiempo</strong>La ronda se cierra con lo que estaba marcado.</div>';
+ h+='<div class="card"><table class="t"><tr><td>Puntos de las preguntas</td><td><b>'+R.pts+'</b></td></tr><tr><td>Errores</td><td>'+R.err+'</td></tr>'
+ +'<tr><td>Bonus de rapidez</td><td>'+(R.speed?'+10':'No suma ('+(R.err?'hubo errores':'pasó la mitad del tiempo')+')')+'</td></tr></table></div>';
+ h+='<h3>SBAR de quien comunica</h3><p class="muted">Tocá cada parte que el mensaje cubrió. Con las cuatro, suma 10 puntos.'+(c.sbar?' En este evento es obligatorio.':'')+'</p><div class="chips">'
+ +names.map((n,i)=>'<button class="chip" data-s="'+i+'" aria-pressed="'+(R.sbar[i]?'true':'false')+'">'+n+'</button>').join('')+'</div>';
+ if(R.err===0&&!R.timed&&S.lv>=3&&S.lives<5)h+='<div class="fb ok"><strong>Ronda sin errores</strong>Recuperan una vida.</div>';
+ h+='<button class="btn" id="cont"'+(c.sbar&&!ok4?' disabled':'')+'>Continuar</button>';
+ wait('Cierre de la ronda '+c.id+'. El coordinador suma los puntos.');
+ put(hudHTML().replace(/id="tm"/,'')+h);
+ on('[data-s]',b=>b.onclick=()=>{R.sbar[+b.dataset.s]=R.sbar[+b.dataset.s]?0:1;drawClose();});
+ $('cont').onclick=finishRound;
+}
+function finishRound(){
+ const h=S.half?.5:1;let add=0;
+ if(R.speed)add+=10;
+ if(R.sbar.every(Boolean))add+=10;
+ add*=h;S.score+=add;S.lvScore+=add;
+ if(R.err===0&&!R.timed&&S.lv>=3&&S.lives<5)S.lives++;
+ S.ri++;R=null;save();
+ if(S.ri>=S.plan[S.lv].length)levelEnd();else startRound();
+}
+function levelEnd(){
+ const k=S.lv,n=S.plan[k].length,mx=n*60*(S.half?.5:1),min=Math.ceil(.6*mx),pass=S.lvBase>=min;
+ let coop=true;
+ wait('Nivel '+(k+1)+(pass?' superado.':' sin superar.'));
+ const draw=()=>{
+  put('<h2>Nivel '+(k+1)+' '+(pass?'superado':'sin superar')+'</h2>'
+  +'<div class="card"><table class="t"><tr><td>Puntos de las preguntas</td><td><b>'+S.lvBase+'</b> de '+mx+'</td></tr><tr><td>Mínimo para avanzar</td><td>'+min+'</td></tr><tr><td>Puntaje total</td><td>'+S.score+'</td></tr></table></div>'
+  +(pass?'<div class="badge">'+badgeSVG(k+1,true)+'<div><b>Insignia: '+LV[k].b+'</b>'+(k<4?'<div class="muted">Tarjeta de ayuda: '+CARDS[k].n+'</div>':'')+'</div></div>'
+  +'<p>Cooperación: si todas las personas ocuparon algún rol, el equipo suma 50 puntos.</p><div class="chips"><button class="chip" id="cp" aria-pressed="'+coop+'">Todas participaron</button></div>'
+  :'<div class="fb warn"><strong>Hace falta repetir el nivel</strong>No se llegó al 60% del puntaje de las preguntas. Se repite el nivel y se conservan las vidas.</div>')
+  +'<button class="btn" id="nx">'+(pass?(k<4?'Siguiente nivel':'Ir al debriefing'):'Repetir el nivel')+'</button>');
+  if($('cp'))$('cp').onclick=()=>{coop=!coop;draw()};
+  $('nx').onclick=()=>{
+   if(pass){
+    if(coop)S.score+=50;
+    S.badges.push(LV[k].b);if(k<4)S.cards.push(CARDS[k].k);
+    S.half=false;S.lv++;S.ri=0;S.lvBase=0;S.lvScore=0;
+    if(S.lv>=5){S.done=true;save();debrief();return}
+    save();levelIntro();
+   }else{S.score-=S.lvScore;S.lvScore=0;S.lvBase=0;S.ri=0;save();levelIntro()}
+  };
+ };
+ draw();
+}
+function rescue(){
+ stop();wait('Reanimación del equipo.');
+ put('<h2>Reanimación del equipo</h2><p>Se terminaron las vidas. Equivocarse en un entrenamiento tiene remedio: se repite el nivel '+(S.lv+1)+' con 3 vidas y la mitad del puntaje, y lo importante es entender qué pasó.</p><button class="btn" id="rs">Repetir el nivel</button>');
+ $('rs').onclick=()=>{S.lives=3;S.half=true;S.score-=S.lvScore;S.lvScore=0;S.lvBase=0;S.ri=0;S.shield=false;save();levelIntro()};
+}
+
+/* ---------- Debriefing y certificado ---------- */
+function debrief(){
+ stop();wait('Debriefing del equipo.');
+ const by={};S.review.forEach(r=>{(by[r.lv]=by[r.lv]||[]).push(r)});
+ const rv=Object.keys(by).map(k=>'<details class="rv"><summary>Nivel '+(+k+1)+'. '+LV[k].n+' ('+by[k].length+')</summary>'+by[k].map(r=>'<div class="rvi'+(r.crit?' crit':'')+'"><div class="muted">'+esc(r.ctx)+(r.crit?', error crítico':'')+'</div><div><b>'+esc(r.q)+'</b></div><div>Marcaron: '+esc(r.got)+'</div><div class="rok">Correcta: '+esc(r.ok)+'</div><div class="muted">'+ver(r.why)+' Fuente: '+ver(r.src)+'</div></div>').join('')+'</details>').join('');
+ put('<h2>Debriefing</h2><p>El puntaje final es <b>'+S.score+'</b>. Se habla de decisiones y de sistemas, no de personas.</p>'
+ +'<details class="rv" open><summary>1. Reacciones</summary><p>¿Cómo se sintió el grupo? ¿Qué momento les costó más y por qué?</p></details>'
+ +'<details class="rv" open><summary>2. Análisis</summary><p>Elijan dos errores y pregúntense qué pasó en la decisión, no quién se equivocó.</p>'+(rv||'<p class="muted">No hubo errores registrados.</p>')+'</details>'
+ +'<details class="rv" open><summary>3. Aplicación</summary><p>Cada persona nombra una práctica del paquete de medidas que va a revisar en su servicio durante esta semana.</p></details>'
+ +'<button class="btn" id="ct">Ver el certificado</button><button class="btn sec" id="hm">Salir al inicio</button>');
+ $('ct').onclick=cert;$('hm').onclick=home;
+}
+function cert(){
+ wait('Fin de la partida.');
+ const who=S.names.length?S.names.join(', '):'Equipo';
+ put('<div class="cert"><h2>Certificado de participación</h2><p>Capacitación cooperativa en emergencias obstétricas</p><p><b>'+esc(who)+'</b></p><div class="big">'+S.score+'</div><p class="muted">puntos del equipo</p>'
+ +'<div style="text-align:left">'+LV.map((l,i)=>'<div class="badge">'+badgeSVG(i+1,S.badges.includes(l.b))+'<div><b>'+l.b+'</b><div class="muted">'+(S.badges.includes(l.b)?'Obtenida':'No obtenida')+', nivel '+(i+1)+'</div></div></div>').join('')+'</div>'
+ +'<p class="muted">'+new Date().toLocaleDateString('es-AR')+'. Certifica la participación en un entrenamiento, no una acreditación de competencias.</p></div>'
+ +(window.claude?'':'<button class="btn noprint" id="pr">Imprimir o guardar</button>')+'<button class="btn sec noprint" id="nw">Nueva partida</button><button class="btn sec noprint" id="hm">Salir al inicio</button>');
+ if($('pr'))$('pr').onclick=()=>{try{window.print()}catch(e){}};
+ $('nw').onclick=()=>{wipe();S=null;setup()};$('hm').onclick=home;
+}
+/* ---------- Modo espejo: ver el caso en mi celular ---------- */
+function viewerPick(){
+ stop();MODE=null;clearInterval(FT);FT=null;
+ let last='';try{last=localStorage.getItem('eoe-follow')||''}catch(e){}
+ put('<h2>Ver el caso en mi celular</h2>'
+ +(ROOM?'<div class="card"><h3>Seguir la partida en vivo</h3><p class="muted">Quien coordina responde. Vos ves el mismo caso y las imágenes en tu pantalla. Pedile el código de la sala.</p>'
+ +'<input type="text" id="cd" maxlength="4" autocapitalize="characters" autocomplete="off" placeholder="Código, por ejemplo K7M2" value="'+esc(last.toUpperCase())+'" aria-label="Código de la sala"><div id="fm"></div>'
+ +'<button class="btn" id="fj">Unirme a la partida</button></div>'
+ +'<p>O elegí a mano el nivel y la ronda.</p>'
+ :'<p>Quien coordina dice en voz alta el número del caso que aparece en su pantalla, por ejemplo 2.3. Tocá ese mismo caso en la lista para verlo en tu celular.</p>')
+ +LV.map((l,k)=>'<h3>Nivel '+(k+1)+'. '+l.n+'</h3>'+CASES.filter(c=>c.lv===k).map(c=>'<button class="btn sec sm" data-id="'+c.id+'">'+c.id+' '+esc(c.t)+'</button>').join('')).join('')
+ +'<button class="btn" id="bk">Volver</button>');
+ on('[data-id]',b=>b.onclick=()=>viewerShow(b.dataset.id));
+ if($('fj'))$('fj').onclick=followStart;$('bk').onclick=home;
+}
+async function followStart(){
+ const code=($('cd').value||'').toLowerCase().replace(/[^a-z0-9]/g,''),fm=$('fm');
+ if(code.length<4){fm.innerHTML='<div class="fb warn">Escribí el código de 4 caracteres.</div>';return}
+ if(!ROOM){fm.innerHTML='<div class="fb warn">La sala en vivo no está disponible en este momento. Podés elegir el caso a mano más abajo.</div>';return}
+ fm.innerHTML='<p class="muted">Conectando...</p>';
+ const r=await joinCode(code);
+ if(!r){fm.innerHTML='<div class="fb warn">No se pudo entrar a la sala. Revisá el código e intentá de nuevo.</div>';return}
+ try{localStorage.setItem('eoe-follow',code)}catch(e){}
+ MODE='follow';FOLLOW=code;lastPres=null;FP=null;
+ if(UNS)UNS();
+ UNS=r.onPeers(()=>drawFollow());
+ clearInterval(FT);FT=setInterval(ftick,500);
+ drawFollow();
+}
+function leaveFollow(){
+ clearInterval(FT);FT=null;if(UNS){UNS();UNS=null}
+ MODE=null;FP=null;lastPres=null;
+ const r=ROOMC;ROOMC=null;if(r){try{r.leave()}catch(e){}}
+ viewerPick();
+}
+function hostPeer(){let b=null;if(ROOMC)ROOMC.peers().forEach(p=>{if(p.presence&&p.presence.host===1&&!p.isMe&&(!b||p.updatedAt>b.updatedAt))b=p});return b}
+function ftick(){
+ if(MODE!=='follow'||!FP)return;
+ const s=FP.presence;if(s.scr!=='round')return;
+ const el=(Date.now()-FP.updatedAt)/1000;let t,pa='';
+ if(s.a>=0)t=s.left;else if(s.fr>0){const f=s.fr-el;if(f>0){t=f;pa='Pausa '}else t=s.left-(el-s.fr)}else t=s.left-el;
+ const e=$('ftm');if(e){e.textContent=pa+mmss(t);e.classList.toggle('low',!pa&&t<20)}
+}
+function drawFollow(){
+ if(MODE!=='follow')return;
+ const hp=hostPeer(),bye='<button class="btn sec" id="fx">Salir de la sala</button>';
+ if(!hp){FP=null;lastPres=null;put('<h2>Sala '+esc(FOLLOW.toUpperCase())+'</h2><p>Esperando al coordinador. Cuando empiece la partida vas a ver el caso acá.</p>'+bye);$('fx').onclick=leaveFollow;return}
+ const s=hp.presence;
+ if(s===lastPres)return;
+ lastPres=s;FP=hp;
+ const c=CASES.find(x=>x.id===s.id);
+ if(s.scr!=='round'||!c||!(s.qi>=0&&s.qi<3)){
+  put('<h2>Sala '+esc(FOLLOW.toUpperCase())+'</h2><div class="card"><h3>'+esc(String(s.m||'El coordinador está preparando la partida.'))+'</h3><div class="hearts" aria-label="'+(+s.lives||0)+' vidas">'+heartsN(+s.lives||0)+'</div><p class="muted"><b>'+(+s.score||0)+'</b> puntos del equipo</p></div>'+bye);
+  $('fx').onclick=leaveFollow;return;
+ }
+ const q=c.q[s.qi],cv=caseView(c,+s.tk||0,!!s.hint),img=cv.img,rows=cv.rows,done=s.a>=0;
+ const perm=Array.isArray(s.perm)&&s.perm.length===4?s.perm:[0,1,2,3],hid=Array.isArray(s.hid)?s.hid:[];
+ /* Las marcas confirmadas llegan como un texto corto, con un dígito por ítem (0 es sin marcar). */
+ const fnm=Array.isArray(s.nm)?s.nm.map(String):[],fkey=s.id+'|'+(+s.rc||0);
+ if(!FK||FK.key!==fkey)FK={key:fkey,m:[],d:false,o:false,off:null};
+ const off=c.ck&&typeof s.ck==='string'&&s.ck.length===ST[c.ck.e].it.length&&/^[0-3]+$/.test(s.ck)?s.ck.split('').map(Number):null;
+ if(off&&!FK.off)FK.o=true;
+ FK.off=off;
+ let h='<div class="hud"><div><b>Nivel '+((+s.lv||0)+1)+'</b><div class="muted">Ronda '+((+s.ri||0)+1)+' de '+(+s.n||1)+'</div></div><div class="tm" id="ftm">'+mmss(s.left)+'</div><div style="text-align:right"><div class="hearts" aria-label="'+(+s.lives||0)+' vidas">'+heartsN(+s.lives||0)+'</div><div class="muted"><b>'+(+s.score||0)+'</b> puntos</div></div></div>'
+ +'<div class="fb ok" style="margin-top:10px"><strong>Estás viendo la partida en vivo</strong>Solo quien coordina responde. Sala '+esc(FOLLOW.toUpperCase())+'.</div>'
+ +'<h2>'+c.id+' '+esc(c.t)+'</h2>'+rolesHTML(fnm,+s.rc||0)+'<p>'+esc(c.ctx)+'</p>'+imgHTML(img);
+ if(c.tomas)h+='<div class="chips">'+c.tomas.map((t,i)=>'<span class="chip" aria-pressed="'+(i===s.tk)+'">Toma '+(i+1)+', '+t.h+'</span>').join('')+'</div>';
+ h+=tableHTML(rows);
+ h+=obsHTML(c,FK,'follow',obsWho(fnm,+s.rc||0));
+ if(s.msg)h+='<div class="fb '+(s.mt==='ok'?'ok':'warn')+'">'+esc(String(s.msg))+'</div>';
+ h+='<div class="card"><div class="qn">Pregunta '+(s.qi+1)+' de 3, '+QL[s.qi]+'</div><h3>'+esc(q.q)+'</h3>';
+ perm.forEach(i=>{
+  let cl='opt';if(done){if(i===0)cl+=' ok';else if(i===s.a)cl+=' bad'}
+  h+='<button class="'+cl+'" type="button" disabled'+(hid.includes(i)?' hidden':'')+'>'+esc(q.o[i]||'')+'</button>';
+ });
+ h+='</div>';
+ if(done)h+='<div class="fb '+(s.a===0?'ok':'bad')+'"><strong>'+esc(String(s.head||''))+'</strong>'+(s.a===0?'':'Respuesta correcta: <b>'+esc(q.o[0])+'</b>.<br>')+ver(q.w)+'<div class="src">Fuente: '+ver(q.s)+'</div></div>';
+ h+=bye;
+ put(h,false);$('fx').onclick=leaveFollow;obsBind(c,FK,'follow');ftick();
+}
+function viewerShow(id){
+ const c=CASES.find(x=>x.id===id);
+ V={c,qi:0,tk:0,rev:false,mine:null,perm:shuffle([0,1,2,3]),k:{m:[],d:false,o:false}};
+ drawV(true);
+}
+function drawV(sc){
+ const c=V.c,q=c.q[V.qi],cv=caseView(c,V.tk,V.rev),img=cv.img,rows=cv.rows,ix=CASES.indexOf(c);
+ let h='<div class="row2"><button class="btn sec sm" id="vp">Elegir otro caso</button><button class="btn sec sm" id="vh">Inicio</button></div>'
+ +'<h2>Nivel '+(c.lv+1)+', '+c.id+' '+esc(c.t)+'</h2><p>'+esc(c.ctx)+'</p>'+imgHTML(img);
+ if(c.tomas)h+='<div class="chips">'+c.tomas.map((t,i)=>'<button class="chip" data-t="'+i+'" aria-pressed="'+(i===V.tk)+'">Toma '+(i+1)+', '+t.h+'</button>').join('')+'</div>';
+ h+=tableHTML(rows);
+ h+=obsHTML(c,V.k,'solo','');
+ h+='<div class="card"><div class="qn">Pregunta '+(V.qi+1)+' de 3, '+QL[V.qi]+'</div><h3>'+esc(q.q)+'</h3>';
+ V.perm.forEach(i=>{
+  let cl='opt';if(V.rev){if(i===0)cl+=' ok';else if(i===V.mine)cl+=' bad'}else if(i===V.mine)cl+=' mine';
+  h+='<button class="'+cl+'" type="button" data-i="'+i+'"'+(V.rev?' disabled':'')+'>'+esc(q.o[i])+'</button>';
+ });
+ h+='<p class="muted">Tocá una opción para marcarla en tu pantalla y discutila con el equipo. La respuesta la dice en voz alta quien comunica.</p>';
+ if(V.rev)h+='<div class="fb ok"><strong>Respuesta correcta</strong>'+ver(q.w)+'<div class="src">Fuente: '+ver(q.s)+'</div></div>';
+ else h+='<button class="btn sec sm" id="vr">Ver la respuesta correcta</button>';
+ h+='<div class="row2"><button class="btn sec sm" id="qp"'+(V.qi===0?' disabled':'')+'>Pregunta anterior</button><button class="btn sec sm" id="qn"'+(V.qi===2?' disabled':'')+'>Pregunta siguiente</button></div></div>'
+ +'<div class="row2"><button class="btn sm" id="cp"'+(ix===0?' disabled':'')+'>Caso anterior</button><button class="btn sm" id="cn"'+(ix===CASES.length-1?' disabled':'')+'>Caso siguiente</button></div>';
+ put(h,sc===true);
+ on('[data-i]',b=>b.onclick=()=>{if(!V.rev){V.mine=+b.dataset.i;drawV(false)}});
+ on('[data-t]',b=>b.onclick=()=>{V.tk=+b.dataset.t;drawV(false)});
+ $('vp').onclick=viewerPick;$('vh').onclick=home;
+ obsBind(c,V.k,'solo',()=>{V.k.d=true;V.k.o=true;drawV(false)});
+ if($('ckx'))$('ckx').onclick=()=>{V.k={m:[],d:false,o:true};drawV(false)};
+ if($('vr'))$('vr').onclick=()=>{V.rev=true;drawV(false)};
+ const go=d=>{V.qi+=d;V.rev=false;V.mine=null;V.perm=shuffle([0,1,2,3]);drawV(true)};
+ $('qp').onclick=()=>go(-1);$('qn').onclick=()=>go(1);
+ $('cp').onclick=()=>viewerShow(CASES[ix-1].id);$('cn').onclick=()=>viewerShow(CASES[ix+1].id);
+}
+window.addEventListener('pagehide',stop);
+home();
+</script>
+</body></html>

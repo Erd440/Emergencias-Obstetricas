@@ -1,0 +1,8 @@
+{
+  "name": "emergencias-obstetricas-garrahan",
+  "private": true,
+  "type": "module",
+  "dependencies": {
+    "@netlify/blobs": "latest"
+  }
+}
